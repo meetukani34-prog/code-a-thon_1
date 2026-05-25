@@ -114,7 +114,9 @@ export default function RoleAuthPage() {
                 setLoading(false);
                 return;
             }
-        } else {
+        }
+        let finalRole = roleParam;
+        if (signInData && !signInError) {
             // Check if existing user actually has the required role
             const userRole = signInData?.user?.user_metadata?.role?.toLowerCase();
             if (userRole !== 'admin' && userRole !== 'superadmin') {
@@ -123,9 +125,10 @@ export default function RoleAuthPage() {
                 setLoading(false);
                 return;
             }
+            finalRole = userRole;
         }
 
-        router.push(roleParam === 'superadmin' ? '/superadmin' : '/admin');
+        router.push(`/${finalRole}`);
         router.refresh();
     };
 
