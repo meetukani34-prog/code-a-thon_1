@@ -69,12 +69,12 @@ export default function FacultyPage() {
             <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
               Today's Classes
             </h3>
-            <button style={{ 
+            <a href="/portal/attendance" style={{ 
               background: 'transparent', border: 'none', color: 'var(--accent-primary)', 
-              fontSize: 'var(--text-xs)', fontWeight: 600, cursor: 'pointer' 
+              fontSize: 'var(--text-xs)', fontWeight: 600, cursor: 'pointer', textDecoration: 'none' 
             }}>
               View Full Schedule →
-            </button>
+            </a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             {[
@@ -108,8 +108,8 @@ export default function FacultyPage() {
             {[
               { label: 'Mark Attendance', icon: '📝', color: 'var(--accent-primary)', path: '/portal/attendance' },
               { label: 'Upload Grades', icon: '📊', color: 'var(--color-success)', path: '/portal/exams' },
-              { label: 'Add Assignment', icon: '📎', color: 'var(--color-warning)', path: '/portal/events' },
-              { label: 'Message Students', icon: '💬', color: 'var(--accent-secondary)', path: '/portal/events' },
+              { label: 'Add Assignment', icon: '📎', color: 'var(--color-warning)', path: '/portal/attendance' },
+              { label: 'Message Students', icon: '💬', color: 'var(--accent-secondary)', path: '/portal/attendance' },
             ].map(action => (
               <a key={action.label} href={action.path} style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',

@@ -69,12 +69,12 @@ export default function StudentPage() {
             <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
               Today's Schedule
             </h3>
-            <button style={{ 
+            <a href="/portal/attendance" style={{ 
               background: 'transparent', border: 'none', color: 'var(--accent-primary)', 
-              fontSize: 'var(--text-xs)', fontWeight: 600, cursor: 'pointer' 
+              fontSize: 'var(--text-xs)', fontWeight: 600, cursor: 'pointer', textDecoration: 'none' 
             }}>
               View Full Timetable →
-            </button>
+            </a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             {[
@@ -114,8 +114,8 @@ export default function StudentPage() {
             {[
               { label: 'Exam Results', icon: '📋', color: 'var(--accent-primary)', path: '/portal/exams' },
               { label: 'Campus Events', icon: '🎭', color: 'var(--color-warning)', path: '/portal/events' },
-              { label: 'Library Access', icon: '📚', color: 'var(--color-success)', path: '/portal/events' },
-              { label: 'Hostel Pass', icon: '🎫', color: 'var(--accent-secondary)', path: '/portal/events' },
+              { label: 'Academics', icon: '📚', color: 'var(--color-success)', path: '/portal/attendance' },
+              { label: 'Hostel Pass', icon: '🎫', color: 'var(--accent-secondary)', path: '/portal/hostel' },
             ].map(action => (
               <a key={action.label} href={action.path} style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
