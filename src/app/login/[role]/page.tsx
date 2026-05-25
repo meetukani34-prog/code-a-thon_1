@@ -125,8 +125,8 @@ export default function RoleAuthPage() {
         if (signInData && !signInError) {
             // Check if existing user actually has the required role
             const userRole = signInData?.user?.user_metadata?.role?.toLowerCase();
-            if (userRole !== 'admin' && userRole !== 'superadmin') {
-                setError(`Unauthorized. This account is registered as ${userRole || 'student'}.`);
+            if (userRole !== roleParam) {
+                setError(`Unauthorized for this portal. This account is registered as a ${userRole || 'student'}. Please use the /login/${userRole || 'student'} portal.`);
                 await supabase.auth.signOut();
                 setLoading(false);
                 return;
