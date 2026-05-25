@@ -75,17 +75,17 @@ export default function DigitalIdentityApprovalPage() {
                   <TableRow key={user.id}>
                     <TableCell>
                       <div className="font-medium">{user.email}</div>
-                      <div className="text-xs text-muted-foreground">{user.raw_user_meta_data?.usn || 'N/A'}</div>
+                      <div className="text-xs text-muted-foreground">{user.user_metadata?.usn || 'N/A'}</div>
                     </TableCell>
-                    <TableCell>{user.raw_user_meta_data?.full_name || 'N/A'}</TableCell>
-                    <TableCell>{user.raw_user_meta_data?.branch || 'N/A'}</TableCell>
+                    <TableCell>{user.user_metadata?.full_name || 'N/A'}</TableCell>
+                    <TableCell>{user.user_metadata?.branch || 'N/A'}</TableCell>
                     <TableCell>
-                      <Badge variant={user.raw_user_meta_data?.role === 'admin' ? 'destructive' : 'default'} className="uppercase text-[10px]">
-                        {user.raw_user_meta_data?.role || 'pending'}
+                      <Badge variant={user.user_metadata?.role === 'admin' ? 'destructive' : 'default'} className="uppercase text-[10px]">
+                        {user.user_metadata?.role || 'pending'}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Select defaultValue={user.raw_user_meta_data?.role} onValueChange={(val) => updateUserRole(user.id, val)}>
+                      <Select defaultValue={user.user_metadata?.role || 'pending'} onValueChange={(val) => updateUserRole(user.id, val)}>
                         <SelectTrigger className="w-[140px] h-8 text-xs">
                           <SelectValue placeholder="Assign Role" />
                         </SelectTrigger>
