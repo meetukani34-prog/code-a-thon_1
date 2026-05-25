@@ -12,6 +12,11 @@ export default function StudentHostelView() {
   const [leaves, setLeaves] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [showForm, setShowForm] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [reason, setReason] = useState('');
+
   // We'll use a mocked student name for demonstration if the user doesn't have one in DB yet.
   const studentName = 'Priya Patel';
 
@@ -48,11 +53,16 @@ export default function StudentHostelView() {
     setLoading(false);
   };
 
-  const handleNewLeave = async () => {
+  const submitLeaveRequest = async () => {
+    if (!startDate || !endDate || !reason) return;
     const supabase = createClient();
     await supabase.from('hostel_leaves').insert([
-      { student_name: studentName, start_date: new Date().toISOString().split('T')[0], end_date: new Date(Date.now() + 86400000).toISOString().split('T')[0], reason: 'Weekend Home Visit', status: 'pending' }
+      { student_name: studentName, start_date: startDate, end_date: endDate, reason: reason, status: 'pending' }
     ]);
+    setShowForm(false);
+    setStartDate('');
+    setEndDate('');
+    setReason('');
     fetchData();
   };
 
@@ -103,9 +113,30 @@ export default function StudentHostelView() {
           <CardContent>
             <div className="space-y-4">
               <div className="grid gap-2">
-                <Button onClick={handleNewLeave} className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50">
-                  + New Leave Request
-                </Button>
+                {!showForm ? (
+                  <Button onClick={() => setShowForm(true)} className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50">
+                    + New Leave Request
+                  </Button>
+                ) : (
+                  <div className="p-4 rounded-lg bg-black/40 border border-primary/30 space-y-3">
+                    <div>
+                      <label className="text-xs text-muted-foreground">Start Date</label>
+                      <input type="date" className="w-full mt-1 bg-background/50 border border-glass-border rounded-md px-2 py-1 text-sm text-white focus:outline-none focus:border-primary" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">End Date</label>
+                      <input type="date" className="w-full mt-1 bg-background/50 border border-glass-border rounded-md px-2 py-1 text-sm text-white focus:outline-none focus:border-primary" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Reason</label>
+                      <input type="text" placeholder="e.g. Family Function" className="w-full mt-1 bg-background/50 border border-glass-border rounded-md px-2 py-1 text-sm text-white focus:outline-none focus:border-primary" value={reason} onChange={(e) => setReason(e.target.value)} />
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <Button onClick={() => setShowForm(false)} variant="outline" className="flex-1 border-white/10 hover:bg-white/5">Cancel</Button>
+                      <Button onClick={submitLeaveRequest} className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" disabled={!startDate || !endDate || !reason}>Submit</Button>
+                    </div>
+                  </div>
+                )}
               </div>
               <h4 className="font-medium text-sm mt-4 mb-2 text-muted-foreground">Recent Requests</h4>
               <div className="space-y-2">
