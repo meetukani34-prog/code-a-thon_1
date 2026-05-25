@@ -39,7 +39,16 @@ export default function PlacementsPage() {
       const res = await fetch('/api/admin/users');
       const data = await res.json();
       if (data.users) {
-        setUsers(data.users.filter((u: any) => u.user_metadata?.role !== 'admin'));
+        const students = data.users
+          .filter((u: any) => u.user_metadata?.role !== 'admin')
+          .map((u: any) => {
+            // Generate a consistent fake attendance percentage (60% to 98%) based on their ID
+            let hash = 0;
+            for (let i = 0; i < u.id.length; i++) hash += u.id.charCodeAt(i);
+            const fakeAttendance = 60 + (hash % 39);
+            return { ...u, mock_attendance: fakeAttendance };
+          });
+        setUsers(students);
       }
     } catch (e) {
       console.error(e);
@@ -107,7 +116,12 @@ export default function PlacementsPage() {
                 }}>
                   <div>
                     <p style={{ fontSize: 'var(--text-md)', fontWeight: 600 }}>{user.user_metadata?.full_name || user.email}</p>
-                    <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.email}</p>
+                    <div style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'center', marginTop: 2 }}>
+                      <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.email}</p>
+                      <p style={{ fontSize: '11px', color: user.mock_attendance < 75 ? 'var(--color-danger)' : 'var(--color-success)', fontWeight: 700 }}>
+                        Attendance: {user.mock_attendance}% {user.mock_attendance < 75 && ' ⚠️'}
+                      </p>
+                    </div>
                   </div>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
