@@ -2,9 +2,10 @@
 
 interface TopBarProps {
   title?: string;
+  role?: string;
 }
 
-export default function TopBar({ title = 'Dashboard' }: TopBarProps) {
+export default function TopBar({ title = 'Dashboard', role = 'student' }: TopBarProps) {
   return (
     <header style={{
       position: 'fixed',
@@ -136,15 +137,17 @@ export default function TopBar({ title = 'Dashboard' }: TopBarProps) {
             justifyContent: 'center',
             fontSize: '12px',
             fontWeight: 700,
+            textTransform: 'uppercase',
           }}>
-            A
+            {role.charAt(0)}
           </div>
           <span style={{
             fontSize: 'var(--text-xs)',
             color: 'var(--text-secondary)',
             fontWeight: 500,
+            textTransform: 'capitalize',
           }}>
-            Admin
+            {role}
           </span>
         </div>
       </div>

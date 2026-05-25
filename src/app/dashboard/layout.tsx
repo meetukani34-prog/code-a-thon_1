@@ -25,7 +25,7 @@ export default async function DashboardLayout({
         marginLeft: 'var(--sidebar-width)',
         paddingTop: 'var(--topbar-height)',
       }}>
-        <TopBar />
+        <TopBar role={role} />
         <main style={{
           padding: 'var(--space-xl)',
           position: 'relative',
