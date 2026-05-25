@@ -218,74 +218,72 @@ export default function RoleAuthPage() {
 
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,212,255,0.05)_0%,_rgba(0,0,0,0)_70%)] pointer-events-none"></div>
               
-              <div className="flex min-h-screen w-full items-center justify-center">
-                <div className="glowing-outer z-10">
-                  <div className="glowing-dot"></div>
-                  <div className="glowing-card">
-                    
-                    <div className="text-center mb-8 relative z-20">
-                      <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center border border-cyan-500/30">
-                        <span className="text-cyan-400 text-xl">🛡️</span>
-                      </div>
-                      <h2 className="text-2xl font-bold text-white tracking-wide">
-                        ADMIN GATEWAY
-                      </h2>
-                      <p className="text-slate-400 mt-2 text-sm">
-                        Secure authentication required
-                      </p>
+              <div className="glowing-outer z-10">
+                <div className="glowing-dot"></div>
+                <div className="glowing-card">
+                  
+                  <div className="text-center mb-8 relative z-20">
+                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center border border-cyan-500/30">
+                      <span className="text-cyan-400 text-xl">🛡️</span>
+                    </div>
+                    <h2 className="text-2xl font-bold text-white tracking-wide">
+                      ADMIN GATEWAY
+                    </h2>
+                    <p className="text-slate-400 mt-2 text-sm">
+                      Secure authentication required
+                    </p>
+                  </div>
+                  
+                  <form onSubmit={handleAdminAuth} className="space-y-5 relative z-20">
+                    <div className="space-y-2">
+                      <Input 
+                        type="email" 
+                        placeholder="Email Address" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="clean-input h-12 px-4 rounded-xl"
+                        required 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Input 
+                        type="password" 
+                        placeholder="Access Key" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="clean-input h-12 px-4 rounded-xl"
+                        required 
+                      />
                     </div>
                     
-                    <form onSubmit={handleAdminAuth} className="space-y-5 relative z-20">
-                      <div className="space-y-2">
-                        <Input 
-                          type="email" 
-                          placeholder="Email Address" 
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="clean-input h-12 px-4 rounded-xl"
-                          required 
-                        />
+                    <div className="pt-4 border-t border-white/10 mt-2">
+                      <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2 block">
+                        Security Clearance
+                      </label>
+                      <Input 
+                        type="password" 
+                        placeholder="Override Key (hint: root123)" 
+                        value={clearanceKey}
+                        onChange={(e) => setClearanceKey(e.target.value)}
+                        className="clean-input h-12 px-4 rounded-xl text-center"
+                        required 
+                      />
+                    </div>
+        
+                    {error && (
+                      <div className="p-3 mt-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                        {error}
                       </div>
-                      <div className="space-y-2">
-                        <Input 
-                          type="password" 
-                          placeholder="Access Key" 
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="clean-input h-12 px-4 rounded-xl"
-                          required 
-                        />
-                      </div>
-                      
-                      <div className="pt-4 border-t border-white/10 mt-2">
-                        <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2 block">
-                          Security Clearance
-                        </label>
-                        <Input 
-                          type="password" 
-                          placeholder="Override Key (hint: root123)" 
-                          value={clearanceKey}
-                          onChange={(e) => setClearanceKey(e.target.value)}
-                          className="clean-input h-12 px-4 rounded-xl text-center"
-                          required 
-                        />
-                      </div>
-          
-                      {error && (
-                        <div className="p-3 mt-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-                          {error}
-                        </div>
-                      )}
-          
-                      <Button 
-                        type="submit" 
-                        className="admin-btn w-full h-12 rounded-xl mt-6 tracking-wide"
-                        disabled={loading}
-                      >
-                        {loading ? 'AUTHENTICATING...' : 'INITIALIZE OVERRIDE →'}
-                      </Button>
-                    </form>
-                  </div>
+                    )}
+        
+                    <Button 
+                      type="submit" 
+                      className="admin-btn w-full h-12 rounded-xl mt-6 tracking-wide"
+                      disabled={loading}
+                    >
+                      {loading ? 'AUTHENTICATING...' : 'INITIALIZE OVERRIDE →'}
+                    </Button>
+                  </form>
                 </div>
               </div>
             </GridGlowBackground>

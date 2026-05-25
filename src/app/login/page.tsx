@@ -2,13 +2,11 @@
 import Link from 'next/link';
 import './auth.css';
 import GridGlowBackground from '@/components/ui/grid-glow-background';
-import CrystalCursor from '@/components/ui/crystal-cursor';
 
 export default function AuthPortalSelection() {
     return (
         <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
-            <CrystalCursor>
-                <div className="auth-body relative z-20" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>
+            <div className="auth-body relative z-20" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>
                 <div className="background-shape"></div>
                 <div className="secondary-shape"></div>
                 
@@ -115,7 +113,6 @@ export default function AuthPortalSelection() {
                     </div>
                 </footer>
             </div>
-            </CrystalCursor>
         </GridGlowBackground>
     );
 }
