@@ -60,31 +60,6 @@ export default function AuthPortalSelection() {
                         </div>
                     </Link>
 
-                    <Link href="/login/admin" style={{ textDecoration: 'none' }}>
-                        <div style={{
-                            padding: '24px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px',
-                            border: '1px solid var(--glass-border)', transition: 'all 0.3s',
-                            cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-warning)'}
-                        onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--glass-border)'}>
-                            <i className="bx bxs-shield-alt-2" style={{ fontSize: '32px', color: 'var(--color-warning)', marginBottom: '12px' }}></i>
-                            <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600 }}>Admin Portal</h3>
-                        </div>
-                    </Link>
-
-                    <Link href="/login/superadmin" style={{ textDecoration: 'none' }}>
-                        <div style={{
-                            padding: '24px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px',
-                            border: '1px solid var(--glass-border)', transition: 'all 0.3s',
-                            cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-danger)'}
-                        onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--glass-border)'}>
-                            <i className="bx bxs-crown" style={{ fontSize: '32px', color: 'var(--color-danger)', marginBottom: '12px' }}></i>
-                            <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600 }}>Superadmin Portal</h3>
-                        </div>
-                    </Link>
                 </div>
             </div>
         </div>
