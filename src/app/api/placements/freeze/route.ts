@@ -1,40 +1,26 @@
 import { NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/server';
+import { createServiceRoleClient, createServerSupabaseClient } from '@/lib/supabase/server';
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { studentId, reason } = body;
-
-    if (!studentId) {
-      return NextResponse.json({ error: 'studentId is required' }, { status: 400 });
-    }
-
-    const supabase = await createServiceRoleClient();
-    
-    const { data, error } = await supabase
-      .from('placements')
-      .update({ status: 'frozen', frozen_reason: reason, updated_at: new Date().toISOString() })
-      .eq('student_id', studentId)
-      .eq('status', 'active')
-      .select();
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    const frozenCount = data?.length || 0;
-
-    console.log(`[PlacementFreeze] ❄️ Frozen ${frozenCount} placements for student ${studentId}: ${reason}`);
-
-    return NextResponse.json({
-      success: true,
-      frozenCount,
-      studentId,
-      reason,
-      timestamp: new Date().toISOString(),
-    });
-  } catch {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+export async function PATCH(req: Request) {
+  const supabase = await createServerSupabaseClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  // Verify Admin Role
+  if (session?.user.user_metadata?.role !== 'admin') {
+    return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
   }
+
+  const { userId, placement_frozen } = await req.json();
+  const adminClient = await createServiceRoleClient();
+  
+  // Update user_metadata with new placement_frozen status
+  const { error } = await adminClient.auth.admin.updateUserById(userId, {
+    user_metadata: { placement_frozen }
+  });
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true, placement_frozen });
 }

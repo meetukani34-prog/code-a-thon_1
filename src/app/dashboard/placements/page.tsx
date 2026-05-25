@@ -5,9 +5,11 @@ import GlassCard from '@/components/ui/GlassCard';
 import { createBrowserClient } from '@supabase/ssr';
 
 export default function PlacementsPage() {
-  const [uploading, setUploading] = useState(false);
-  const [matchScore, setMatchScore] = useState<number | null>(null);
-  const [applications, setApplications] = useState<any[]>([]);
+  const [role, setRole] = useState('student');
+  const [isFrozen, setIsFrozen] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -15,15 +17,71 @@ export default function PlacementsPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     
-    supabase.from('placements')
-      .select('*, users:student_id(full_name)')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setApplications(data || []));
+    // Check current user role & placement status
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        const userRole = data.session.user.user_metadata?.role || 'student';
+        const frozen = data.session.user.user_metadata?.placement_frozen === true;
+        setRole(userRole);
+        setIsFrozen(frozen);
+
+        if (userRole === 'admin') {
+          fetchUsers();
+        } else {
+          setLoading(false);
+        }
+      }
+    });
   }, []);
 
-  const handleUpload = () => {
-    // Stub for dynamic upload
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch('/api/admin/users');
+      const data = await res.json();
+      if (data.users) {
+        const students = data.users
+          .filter((u: any) => u.user_metadata?.role !== 'admin')
+          .map((u: any) => {
+            // Generate a consistent fake attendance percentage (60% to 98%) based on their ID
+            let hash = 0;
+            for (let i = 0; i < u.id.length; i++) hash += u.id.charCodeAt(i);
+            const fakeAttendance = 60 + (hash % 39);
+            return { ...u, mock_attendance: fakeAttendance };
+          });
+        setUsers(students);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleToggleFreeze = async (userId: string, currentStatus: boolean) => {
+    setActionLoading(userId);
+    try {
+      const res = await fetch('/api/placements/freeze', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, placement_frozen: !currentStatus })
+      });
+      if (res.ok) {
+        setUsers(users.map(u => 
+          u.id === userId 
+            ? { ...u, user_metadata: { ...u.user_metadata, placement_frozen: !currentStatus } } 
+            : u
+        ));
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  if (loading) {
+    return <div style={{ color: 'var(--text-muted)' }}>Loading Placements Data...</div>;
+  }
 
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
@@ -32,107 +90,117 @@ export default function PlacementsPage() {
           Placement Operations
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Skill-Graph Automated Sorting & Active Application Management
+          {role === 'admin' ? 'Manage Student Eligibility & Defaulters' : 'Active Recruitment Drives & Eligibility'}
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
-        {/* Candidate Matching Engine */}
-        <GlassCard padding="lg" hover={false}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Skill-Graph Engine
-            </h3>
-            <span className="badge badge-info">Active Reqs: 42</span>
-          </div>
-
-          <div style={{
-            border: '2px dashed var(--glass-border)',
-            borderRadius: 'var(--radius-md)',
-            padding: 'var(--space-2xl)',
-            textAlign: 'center',
-            background: 'rgba(0,0,0,0.2)',
-            marginBottom: 'var(--space-lg)',
-            transition: 'all 0.3s',
-          }}>
-            <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>📄</div>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-primary)', marginBottom: 8 }}>
-              Upload Resume for Auto-Sort
-            </p>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: 'var(--space-lg)' }}>
-              PDF, DOCX up to 5MB (Processed via Cloudinary)
-            </p>
-            
-            <button
-              onClick={handleUpload}
-              disabled={uploading}
-              className="btn btn-primary"
-              style={{ width: '100%', maxWidth: 200 }}
-            >
-              {uploading ? (
-                <>
-                  <span className="animate-spin" style={{ display: 'inline-block' }}>◓</span> Processing...
-                </>
-              ) : 'Select File'}
-            </button>
-          </div>
-
-          {matchScore !== null && (
-            <div style={{
-              padding: 'var(--space-lg)',
-              background: 'rgba(255,255,255,0.05)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--accent-primary)',
-              animation: 'slideUp 0.4s ease-out',
-            }}>
-              {/* Dynamic match score will map here */}
-            </div>
-          )}
-        </GlassCard>
-
-        {/* Active Applications */}
+      {role === 'admin' ? (
+        // ADMIN VIEW
         <GlassCard padding="lg" hover={false}>
           <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
-            Pipeline Status
+            Student Placement Status Matrix
           </h3>
-
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-            {applications.length > 0 ? applications.map((app, i) => (
-              <div key={i} style={{
-                padding: 'var(--space-md)',
-                background: 'rgba(0,0,0,0.2)',
-                border: '1px solid',
-                borderColor: app.status === 'frozen' ? 'var(--color-danger)' : 'var(--glass-border)',
-                borderRadius: 'var(--radius-md)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-                <div>
-                  <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{app.company}</p>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{app.position} • {app.users?.full_name}</p>
-                </div>
-                
-                <div style={{ textAlign: 'right' }}>
-                  {app.status === 'frozen' ? (
-                    <span className="badge badge-danger">Frozen (Auto)</span>
-                  ) : app.status === 'interview_scheduled' ? (
-                    <span className="badge badge-success">Slotted</span>
-                  ) : (
-                    <span className="badge badge-info">{app.status}</span>
-                  )}
+            {users.length > 0 ? users.map((user) => {
+              const isUserFrozen = user.user_metadata?.placement_frozen === true;
+              return (
+                <div key={user.id} style={{
+                  padding: 'var(--space-md)',
+                  background: isUserFrozen ? 'rgba(255, 60, 60, 0.05)' : 'rgba(0,0,0,0.2)',
+                  border: '1px solid',
+                  borderColor: isUserFrozen ? 'var(--color-danger)' : 'var(--glass-border)',
+                  borderRadius: 'var(--radius-md)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                  <div>
+                    <p style={{ fontSize: 'var(--text-md)', fontWeight: 600 }}>{user.user_metadata?.full_name || user.email}</p>
+                    <div style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'center', marginTop: 2 }}>
+                      <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.email}</p>
+                      <p style={{ fontSize: '11px', color: user.mock_attendance < 75 ? 'var(--color-danger)' : 'var(--color-success)', fontWeight: 700 }}>
+                        Attendance: {user.mock_attendance}% {user.mock_attendance < 75 && ' ⚠️'}
+                      </p>
+                    </div>
+                  </div>
                   
-                  {app.frozen_reason && (
-                    <p style={{ fontSize: '10px', color: 'var(--color-danger)', marginTop: 4 }}>
-                      {app.frozen_reason}
-                    </p>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+                    <span className={`badge ${isUserFrozen ? 'badge-danger' : 'badge-success'}`}>
+                      {isUserFrozen ? 'Frozen' : 'Active'}
+                    </span>
+                    <button
+                      onClick={() => handleToggleFreeze(user.id, isUserFrozen)}
+                      disabled={actionLoading === user.id}
+                      style={{
+                        padding: '6px 12px',
+                        background: isUserFrozen ? 'var(--color-success)' : 'var(--color-danger)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        fontWeight: 'bold',
+                        cursor: actionLoading === user.id ? 'not-allowed' : 'pointer',
+                        opacity: actionLoading === user.id ? 0.5 : 1
+                      }}
+                    >
+                      {actionLoading === user.id ? 'Updating...' : (isUserFrozen ? 'Unfreeze Student' : 'Freeze Placement')}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )) : <p style={{ fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-md)' }}>No active applications</p>}
+              );
+            }) : (
+              <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>No students found.</p>
+            )}
           </div>
         </GlassCard>
-      </div>
+      ) : (
+        // STUDENT VIEW
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)' }}>
+          {isFrozen ? (
+            <GlassCard padding="lg" hover={false} glow="danger" style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '4rem', marginBottom: 'var(--space-md)' }}>🛑</div>
+              <h2 style={{ fontSize: '2rem', color: 'var(--color-danger)', fontWeight: 900, marginBottom: 'var(--space-sm)' }}>
+                PLACEMENTS FROZEN
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', maxWidth: 400, margin: '0 auto', lineHeight: 1.6 }}>
+                Your placement privileges have been temporarily suspended due to attendance threshold breaches or disciplinary action. Please contact the Chief Warden immediately.
+              </p>
+            </GlassCard>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
+              <GlassCard padding="lg">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-lg)' }}>
+                  <div>
+                    <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 700 }}>Google (Alphabet Inc.)</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Software Engineer, L3</p>
+                  </div>
+                  <span className="badge badge-success">Accepting</span>
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-sm)', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--space-md)' }}>
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Eligibility:</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600 }}>&gt; 8.0 CGPA, No Backlogs</p>
+                </div>
+                <button className="btn btn-primary" style={{ width: '100%' }}>Apply with Auto-Resume</button>
+              </GlassCard>
+
+              <GlassCard padding="lg">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-lg)' }}>
+                  <div>
+                    <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 700 }}>Microsoft</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Cloud Solution Architect</p>
+                  </div>
+                  <span className="badge badge-info">Interviewing</span>
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-sm)', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--space-md)' }}>
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status:</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent-primary)' }}>Round 1 Cleared</p>
+                </div>
+                <button className="btn btn-outline" style={{ width: '100%' }} disabled>View Details</button>
+              </GlassCard>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

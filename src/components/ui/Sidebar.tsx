@@ -13,7 +13,7 @@ const navItems = [
   { id: 'events', label: 'Events Portal', icon: '★', path: '/dashboard/events' },
   { id: 'attendance', label: 'Attendance', icon: '◎', path: '/dashboard/attendance' },
   { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements', allowedRoles: ['admin', 'superadmin'] },
-  { id: 'timetable', label: 'Timetable', icon: '▦', path: '/dashboard/timetable' },
+  // { id: 'timetable', label: 'Timetable', icon: '▦', path: '/dashboard/timetable' },
   { id: 'transport', label: 'Transport', icon: '◬', path: '/dashboard/transport' },
   { id: 'analytics', label: 'Analytics', icon: '◫', path: '/dashboard/analytics' },
 ];
