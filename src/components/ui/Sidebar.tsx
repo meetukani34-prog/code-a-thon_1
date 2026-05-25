@@ -87,7 +87,7 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
         padding: 'var(--space-md)',
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--space-xs)',
+        gap: '12px',
         overflowY: 'auto',
       }}>
         {navItems.map((item) => {
@@ -96,6 +96,7 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
           if ((item as any).hideRoles && (item as any).hideRoles.includes(role)) return null;
           
           const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname?.startsWith(item.path));
+          
           return (
             <Link
               key={item.id}
@@ -104,45 +105,67 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 'var(--space-md)',
-                padding: '10px var(--space-md)',
-                borderRadius: 'var(--radius-md)',
-                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                background: isActive ? 'var(--glass-bg-hover)' : 'transparent',
-                border: isActive ? '1px solid var(--glass-border-hover)' : '1px solid transparent',
-                transition: 'all var(--transition-normal)',
+                padding: '14px 18px',
+                borderRadius: '16px',
+                color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                background: isActive 
+                  ? 'linear-gradient(90deg, rgba(0, 212, 255, 0.8) 0%, rgba(157, 0, 255, 0.6) 100%)' 
+                  : 'rgba(255, 255, 255, 0.03)',
+                border: isActive 
+                  ? '1px solid rgba(255, 255, 255, 0.4)' 
+                  : '1px solid rgba(255, 255, 255, 0.05)',
+                boxShadow: isActive 
+                  ? '0 8px 32px 0 rgba(0, 212, 255, 0.3), inset 0 0 12px rgba(255, 255, 255, 0.2)' 
+                  : '0 4px 12px 0 rgba(0, 0, 0, 0.2)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 textDecoration: 'none',
-                fontSize: 'var(--text-sm)',
-                fontWeight: isActive ? 600 : 400,
+                fontSize: '0.95rem',
+                fontWeight: isActive ? 600 : 500,
                 position: 'relative',
                 overflow: 'hidden',
+                transform: 'translateZ(0)', // Force GPU acceleration for smooth floating
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.background = 'var(--glass-bg)';
-                  e.currentTarget.style.color = 'var(--text-primary)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.color = '#ffffff';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'var(--text-secondary)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
                 }
               }}
             >
               {isActive && (
                 <div style={{
                   position: 'absolute',
-                  left: 0,
-                  top: '20%',
-                  bottom: '20%',
-                  width: 3,
-                  borderRadius: 'var(--radius-full)',
-                  background: 'var(--accent-primary)',
-                  boxShadow: '0 0 10px var(--accent-primary)',
+                  left: 4,
+                  top: '15%',
+                  bottom: '15%',
+                  width: 4,
+                  borderRadius: '10px',
+                  background: '#ffffff',
+                  boxShadow: '0 0 10px #ffffff, 0 0 20px #00d4ff',
                 }} />
               )}
-              <span style={{ fontSize: '1.1rem', opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
-              <span>{item.label}</span>
+              <span style={{ 
+                fontSize: '1.2rem', 
+                opacity: isActive ? 1 : 0.7,
+                filter: isActive ? 'drop-shadow(0 0 8px rgba(255,255,255,0.8))' : 'none',
+              }}>
+                {item.icon}
+              </span>
+              <span style={{
+                textShadow: isActive ? '0 0 10px rgba(255,255,255,0.4)' : 'none'
+              }}>
+                {item.label}
+              </span>
             </Link>
           );
         })}
