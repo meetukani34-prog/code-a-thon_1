@@ -14,8 +14,6 @@ export default function AuthPortalSelection() {
                 className="absolute inset-0 z-0" 
             />
             <div className="auth-body relative z-20" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>
-                <div className="background-shape"></div>
-                <div className="secondary-shape"></div>
                 
                 {/* Header Section */}
                 <header style={{ width: '100%', padding: '24px 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
