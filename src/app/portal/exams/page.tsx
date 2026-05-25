@@ -1,4 +1,19 @@
-export default function ExamsPortal() {
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import StudentExamView from '@/components/exams/StudentExamView';
+import FacultyExamView from '@/components/exams/FacultyExamView';
+import AdminExamView from '@/components/exams/AdminExamView';
+
+export default async function ExamsPortal() {
+  const supabase = await createServerSupabaseClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session) {
+    redirect('/');
+  }
+
+  const role = session.user.user_metadata?.role?.toLowerCase() || 'student';
+
   return (
     <div>
       <h1 style={{
@@ -9,17 +24,14 @@ export default function ExamsPortal() {
         alignItems: 'center',
         gap: 'var(--space-sm)'
       }}>
-        <span style={{ color: 'var(--accent-primary)' }}>✎</span> Exam Portal
+        <span style={{ color: 'var(--accent-primary)' }}>✎</span> 
+        {role === 'faculty' ? 'Faculty Exam Center' : role === 'admin' || role === 'superadmin' ? 'Master Exam Control' : 'Student Exam Portal'}
       </h1>
-      <div style={{
-        background: 'rgba(20, 22, 30, 0.5)',
-        border: '1px solid var(--glass-border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: 'var(--space-xl)',
-        color: 'var(--text-secondary)'
-      }}>
-        <p>Exam portal content coming soon. You can build this out later!</p>
-      </div>
+      
+      {role === 'student' && <StudentExamView />}
+      {role === 'faculty' && <FacultyExamView />}
+      {(role === 'admin' || role === 'superadmin') && <AdminExamView />}
+      
     </div>
   );
 }
