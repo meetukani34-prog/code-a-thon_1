@@ -15,7 +15,8 @@ export default async function DashboardLayout({
     redirect('/');
   }
 
-  const role = session.user.user_metadata?.role || 'student';
+  const rawRole = session.user.user_metadata?.role || 'student';
+  const role = rawRole.toLowerCase();
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
