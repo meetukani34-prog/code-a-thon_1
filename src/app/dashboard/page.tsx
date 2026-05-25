@@ -48,149 +48,186 @@ export default function DashboardPage() {
   if (!mounted) return null;
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      {/* Header */}
-      <div style={{ marginBottom: 'var(--space-xl)' }}>
-        <h1 style={{
-          fontSize: 'var(--text-2xl)',
-          fontWeight: 800,
-          marginBottom: 'var(--space-xs)',
-        }}>
-          Command Center
-        </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Real-time operational metrics across all campus nodes
-        </p>
+    <>
+      {/* 3D Fluid CSS Background */}
+      <div className="fluid-3d-container" style={{ position: 'fixed', zIndex: -1 }}>
+        <div className="fluid-fold fluid-fold-1"></div>
+        <div className="fluid-fold fluid-fold-2"></div>
+        <div className="fluid-fold fluid-fold-3"></div>
+        <div className="fluid-overlay"></div>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid-stats" style={{ marginBottom: 'var(--space-xl)' }}>
-        <StatCard label="Student Attendance" value={stats.attendance} suffix="%" icon="◎" color="var(--color-success)" decimals={1} />
-        <StatCard label="Placement Rate" value={stats.placements} suffix="%" icon="◈" color="var(--accent-secondary)" decimals={1} />
-        <StatCard label="Active Alerts" value={events.filter(e => e.severity === 'critical' || e.severity === 'warning').length} icon="⚡" color="var(--color-danger)" />
-      </div>
-
-      {/* Layout */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gap: 'var(--space-lg)',
-      }}>
-        {/* Event Feed */}
-        <GlassCard padding="lg" hover={false}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 'var(--space-lg)',
+      <div className="content-front" style={{ animation: 'fadeIn 0.5s ease-out' }}>
+        {/* Header */}
+        <div style={{ marginBottom: 'var(--space-xl)', textAlign: 'center', marginTop: 'var(--space-xl)' }}>
+          <h1 style={{
+            fontFamily: '"Playfair Display", serif',
+            fontSize: '4rem',
+            fontWeight: 400,
+            letterSpacing: '-1px',
+            marginBottom: 'var(--space-sm)',
+            textShadow: '0 10px 30px rgba(0,0,0,0.5)'
           }}>
-            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Live Event Feed
-            </h3>
-            <div style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: 'var(--color-success)',
-              boxShadow: '0 0 8px var(--color-success)',
-              animation: 'pulseGlow 2s ease-in-out infinite',
-            }} />
+            Welcome to Campus
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
+            A <span style={{ fontStyle: 'italic', color: '#fff' }}>Creative</span> hub for your academics.
+          </p>
+          
+          <div style={{ marginTop: 'var(--space-xl)', display: 'flex', gap: 'var(--space-md)', justifyContent: 'center' }}>
+            <button style={{
+              background: '#fff', color: '#000', padding: '12px 32px', borderRadius: '30px', 
+              fontWeight: 500, fontSize: '0.9rem', border: 'none', cursor: 'pointer',
+              transition: 'transform 0.2s', boxShadow: '0 4px 15px rgba(255,255,255,0.1)'
+            }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+              See Schedule
+            </button>
+            <button style={{
+              background: 'transparent', color: '#fff', padding: '12px 32px', borderRadius: '30px', 
+              fontWeight: 500, fontSize: '0.9rem', border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer',
+              transition: 'all 0.2s'
+            }} onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'scale(1.05)'; }} onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}>
+              Reach out...
+            </button>
           </div>
+        </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-            {events.map((event, idx) => (
-              <div
-                key={event.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 'var(--space-md)',
-                  padding: 'var(--space-sm) var(--space-md)',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'rgba(0,0,0,0.2)',
-                  border: `1px solid ${severityColors[event.severity]}20`,
-                  animation: `slideUp 0.3s ease-out ${idx * 0.1}s both`,
-                }}
-              >
-                <div style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: severityColors[event.severity],
-                  boxShadow: `0 0 8px ${severityColors[event.severity]}`,
-                  flexShrink: 0,
-                }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{
-                    fontSize: 'var(--text-xs)',
-                    fontFamily: 'var(--font-mono)',
-                    color: severityColors[event.severity],
-                    fontWeight: 600,
-                  }}>
-                    {event.event_type}
-                  </p>
-                  <p style={{
-                    fontSize: '11px',
-                    color: 'var(--text-muted)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {JSON.stringify(event.payload).slice(0, 80)}...
-                  </p>
-                </div>
-                <span style={{
-                  fontSize: '10px',
-                  color: 'var(--text-muted)',
-                  fontFamily: 'var(--font-mono)',
-                  flexShrink: 0,
-                }}>
-                  {new Date(event.created_at).toLocaleTimeString()}
-                </span>
-              </div>
-            ))}
-          </div>
-        </GlassCard>
-
-
-      </div>
-
-      {/* System Architecture Overview */}
-      <GlassCard padding="lg" hover={false} className="animate-slide-up" >
-        <h3 style={{
-          fontSize: 'var(--text-sm)',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '1px',
-          marginBottom: 'var(--space-lg)',
-          marginTop: 'var(--space-lg)',
+        <div style={{
+          textAlign: 'center', margin: '4rem 0', color: 'rgba(255,255,255,0.3)',
+          fontSize: '0.7rem', letterSpacing: '4px', textTransform: 'uppercase',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'
         }}>
-          Architecture Telemetry
-        </h3>
+          <span>Scroll</span>
+          <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.3)' }}></div>
+        </div>
+
+        {/* Existing Stat Cards (Preserved as requested) */}
+        <div className="grid-stats" style={{ marginBottom: 'var(--space-xl)' }}>
+          <StatCard label="Student Attendance" value={stats.attendance} suffix="%" icon="◎" color="var(--color-success)" decimals={1} />
+          <StatCard label="Placement Rate" value={stats.placements} suffix="%" icon="◈" color="var(--accent-secondary)" decimals={1} />
+          <StatCard label="Active Alerts" value={events.filter(e => e.severity === 'critical' || e.severity === 'warning').length} icon="⚡" color="var(--color-danger)" />
+        </div>
+
+        {/* Layout */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: 'var(--space-md)',
+          gridTemplateColumns: '1fr',
+          gap: 'var(--space-lg)',
         }}>
-          {telemetry.length > 0 ? (
-            telemetry.map((sys: any) => (
-              <div key={sys.label} style={{
-                textAlign: 'center',
-                padding: 'var(--space-md)',
-                borderRadius: 'var(--radius-md)',
-                background: 'rgba(0,0,0,0.2)',
-                border: '1px solid var(--glass-border)',
-              }}>
-                <p style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>{sys.icon}</p>
-                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 2 }}>{sys.label}</p>
-                <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: sys.color, fontFamily: 'var(--font-mono)' }}>{sys.value}</p>
-              </div>
-            ))
-          ) : (
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', gridColumn: '1 / -1' }}>Awaiting telemetry stream...</p>
-          )}
+          {/* Event Feed */}
+          <GlassCard padding="lg" hover={false}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 'var(--space-lg)',
+            }}>
+              <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Live Event Feed
+              </h3>
+              <div style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: 'var(--color-success)',
+                boxShadow: '0 0 8px var(--color-success)',
+                animation: 'pulseGlow 2s ease-in-out infinite',
+              }} />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              {events.map((event, idx) => (
+                <div
+                  key={event.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-md)',
+                    padding: 'var(--space-sm) var(--space-md)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'rgba(0,0,0,0.2)',
+                    border: `1px solid ${severityColors[event.severity]}20`,
+                    animation: `slideUp 0.3s ease-out ${idx * 0.1}s both`,
+                  }}
+                >
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: severityColors[event.severity],
+                    boxShadow: `0 0 8px ${severityColors[event.severity]}`,
+                    flexShrink: 0,
+                  }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      fontFamily: 'var(--font-mono)',
+                      color: severityColors[event.severity],
+                      fontWeight: 600,
+                    }}>
+                      {event.event_type}
+                    </p>
+                    <p style={{
+                      fontSize: '11px',
+                      color: 'var(--text-muted)',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {JSON.stringify(event.payload).slice(0, 80)}...
+                    </p>
+                  </div>
+                  <span style={{
+                    fontSize: '10px',
+                    color: 'var(--text-muted)',
+                    fontFamily: 'var(--font-mono)',
+                    flexShrink: 0,
+                  }}>
+                    {new Date(event.created_at).toLocaleTimeString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
-      </GlassCard>
-    </div>
+
+        {/* System Architecture Overview */}
+        <GlassCard padding="lg" hover={false} className="animate-slide-up" >
+          <h3 style={{
+            fontSize: 'var(--text-sm)',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '1px',
+            marginBottom: 'var(--space-lg)',
+            marginTop: 'var(--space-lg)',
+          }}>
+            Architecture Telemetry
+          </h3>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: 'var(--space-md)',
+          }}>
+            {telemetry.length > 0 ? (
+              telemetry.map((sys: any) => (
+                <div key={sys.label} style={{
+                  textAlign: 'center',
+                  padding: 'var(--space-md)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'rgba(0,0,0,0.2)',
+                  border: '1px solid var(--glass-border)',
+                }}>
+                  <p style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>{sys.icon}</p>
+                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 2 }}>{sys.label}</p>
+                  <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: sys.color, fontFamily: 'var(--font-mono)' }}>{sys.value}</p>
+                </div>
+              ))
+            ) : (
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', gridColumn: '1 / -1' }}>Awaiting telemetry stream...</p>
+            )}
+          </div>
+        </GlassCard>
+      </div>
+    </>
   );
 }

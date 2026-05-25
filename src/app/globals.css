@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -226,6 +226,86 @@ a:hover {
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fluidFold1 {
+  0% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.8; }
+  50% { transform: scale(1.2) rotate(5deg) translate(5%, 5%); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.8; }
+}
+
+@keyframes fluidFold2 {
+  0% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.6; }
+  50% { transform: scale(1.3) rotate(-5deg) translate(-5%, 2%); opacity: 0.9; }
+  100% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.6; }
+}
+
+@keyframes fluidFold3 {
+  0% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.7; }
+  50% { transform: scale(1.1) rotate(3deg) translate(2%, -5%); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.7; }
+}
+
+.fluid-3d-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #050b14; /* Deep space dark */
+  z-index: 0;
+}
+
+/* The folded light beams / ribbon effect */
+.fluid-fold {
+  position: absolute;
+  filter: blur(80px);
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+
+.fluid-fold-1 {
+  width: 120%;
+  height: 60%;
+  top: -10%;
+  left: -10%;
+  background: linear-gradient(135deg, rgba(30,100,200,0.6) 0%, rgba(10,40,100,0) 100%);
+  animation: fluidFold1 15s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.fluid-fold-2 {
+  width: 150%;
+  height: 80%;
+  bottom: -20%;
+  right: -20%;
+  background: linear-gradient(225deg, rgba(60,160,255,0.4) 0%, rgba(10,50,150,0) 80%);
+  animation: fluidFold2 18s ease-in-out infinite reverse;
+  transform-origin: center center;
+}
+
+.fluid-fold-3 {
+  width: 80%;
+  height: 150%;
+  top: -20%;
+  left: 20%;
+  background: linear-gradient(180deg, rgba(80,200,255,0.3) 0%, rgba(0,30,80,0) 100%);
+  animation: fluidFold3 20s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* A dark overlay to give depth and contrast for text */
+.fluid-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, #02060d 120%);
+  z-index: 1;
+}
+
+.content-front {
+  position: relative;
+  z-index: 10;
 }
 
 @keyframes slideInLeft {
