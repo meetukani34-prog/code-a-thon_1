@@ -4,10 +4,9 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function AdminExamView() {
-  const [threshold, setThreshold] = useState('75');
+  const [threshold] = useState('75');
   const [examType, setExamType] = useState('End-Semester');
   const [isLocked, setIsLocked] = useState(false);
 
@@ -111,16 +110,15 @@ export default function AdminExamView() {
                   <div className="font-medium text-sm">Exam Type</div>
                   <div className="text-xs text-muted-foreground">Current ongoing examination cycle</div>
                 </div>
-                <Select value={examType} onValueChange={setExamType}>
-                  <SelectTrigger className="w-[140px] h-8 text-xs bg-background/50 border-glass-border">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Mid-Semester">Mid-Semester</SelectItem>
-                    <SelectItem value="End-Semester">End-Semester</SelectItem>
-                    <SelectItem value="Supplementary">Supplementary</SelectItem>
-                  </SelectContent>
-                </Select>
+                <select 
+                  value={examType} 
+                  onChange={(e) => setExamType(e.target.value)}
+                  className="w-[140px] h-8 text-xs bg-background/50 border border-glass-border rounded-md px-2 text-primary focus:outline-none focus:border-primary"
+                >
+                  <option value="Mid-Semester" className="bg-black text-white">Mid-Semester</option>
+                  <option value="End-Semester" className="bg-black text-white">End-Semester</option>
+                  <option value="Supplementary" className="bg-black text-white">Supplementary</option>
+                </select>
               </div>
 
               <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/5">
