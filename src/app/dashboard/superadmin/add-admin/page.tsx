@@ -17,28 +17,34 @@ export default function AddAdminPage() {
     setLoading(true);
     setMessage(null);
 
-    const supabase = createClient();
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
+    try {
+      const res = await fetch('/api/admin/create-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
           full_name: fullName,
-          region: region,
-          role: 'admin',
-        }
-      }
-    });
+          region,
+          role: 'admin'
+        })
+      });
 
-    if (error) {
-      setMessage({ type: 'error', text: error.message });
-    } else {
-      setMessage({ type: 'success', text: 'Admin account provisioned successfully.' });
-      setFullName('');
-      setEmail('');
-      setPassword('');
-      setRegion('');
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage({ type: 'error', text: data.error || 'Failed to provision admin.' });
+      } else {
+        setMessage({ type: 'success', text: 'Admin account provisioned successfully.' });
+        setFullName('');
+        setEmail('');
+        setPassword('');
+        setRegion('');
+      }
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message || 'An error occurred' });
     }
+    
     setLoading(false);
   };
 

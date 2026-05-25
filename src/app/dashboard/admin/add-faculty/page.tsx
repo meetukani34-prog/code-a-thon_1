@@ -39,31 +39,37 @@ export default function ManageUsersPage() {
     setLoading(true);
     setMessage(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
+    try {
+      const res = await fetch('/api/admin/create-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
           full_name: fullName,
           college_name: collegeName,
-          location: location,
-          role: selectedRole,
-        }
-      }
-    });
+          location,
+          role: selectedRole
+        })
+      });
 
-    if (error) {
-      setMessage({ type: 'error', text: error.message });
-    } else {
-      setMessage({ type: 'success', text: `${selectedRole === 'admin' ? 'Admin' : 'Faculty'} account created successfully.` });
-      setFullName('');
-      setEmail('');
-      setPassword('');
-      setCollegeName('');
-      setLocation('');
-      setTimeout(() => fetchHistory(), 1000);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage({ type: 'error', text: data.error || 'Failed to create account.' });
+      } else {
+        setMessage({ type: 'success', text: `${selectedRole === 'admin' ? 'Admin' : 'Faculty'} account created successfully.` });
+        setFullName('');
+        setEmail('');
+        setPassword('');
+        setCollegeName('');
+        setLocation('');
+        setTimeout(() => fetchHistory(), 1000);
+      }
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message || 'An error occurred' });
     }
+    
     setLoading(false);
   };
 
