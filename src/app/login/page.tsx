@@ -1,18 +1,12 @@
 'use client';
 import Link from 'next/link';
 import './auth.css';
-import NeuralBackground from '@/components/ui/flow-field-background';
+import LightRaysBackground from '@/components/ui/light-rays-background';
 
 export default function AuthPortalSelection() {
     return (
-        <div className="relative min-h-screen w-full overflow-hidden bg-black">
-            <NeuralBackground 
-                color="#00d4ff" 
-                trailOpacity={0.15} 
-                particleCount={800} 
-                speed={0.8} 
-                className="absolute inset-0 z-0" 
-            />
+        <div className="relative min-h-screen w-full overflow-hidden bg-[#050505]">
+            <LightRaysBackground rayColor="rgba(255, 255, 255," className="absolute inset-0 z-0" />
             <div className="auth-body relative z-20" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>
                 
                 {/* Header Section */}
