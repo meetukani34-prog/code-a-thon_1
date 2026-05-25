@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import GridGlowBackground from '@/components/ui/grid-glow-background';
 import '../auth.css';
 
 export default function RoleAuthPage() {
