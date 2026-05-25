@@ -1,27 +1,8 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import './auth.css';
 
 export default function AuthPortalSelection() {
-    const [searchVal, setSearchVal] = useState('');
-    const [searchMsg, setSearchMsg] = useState('');
-    const router = useRouter();
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        const val = searchVal.trim().toLowerCase();
-        if (val === 'admin') {
-            router.push('/login/admin');
-        } else if (val === 'adm') {
-            router.push('/adm');
-        } else {
-            setSearchMsg('Access Denied. Invalid clearance code.');
-            setTimeout(() => setSearchMsg(''), 2000);
-        }
-    };
-
     return (
         <div className="auth-body" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
             <div className="background-shape"></div>
@@ -83,7 +64,7 @@ export default function AuthPortalSelection() {
                     <p style={{ color: 'var(--text-muted)', marginBottom: '30px', fontSize: '14px' }}>Select your security clearance level to continue</p>
                     
                     {/* Student & Faculty Buttons */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                         <Link href="/login/student" style={{ textDecoration: 'none' }}>
                             <div style={{
                                 padding: '24px', background: 'rgba(0,0,0,0.4)', borderRadius: '12px',
@@ -109,54 +90,6 @@ export default function AuthPortalSelection() {
                                 <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600 }}>Faculty Portal</h3>
                             </div>
                         </Link>
-                    </div>
-
-                    {/* Secret Admin Search Bar */}
-                    <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '20px' }}>
-                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '12px', letterSpacing: '1px', textTransform: 'uppercase' }}>Administrative Access</p>
-                        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px' }}>
-                            <input
-                                type="text"
-                                value={searchVal}
-                                onChange={(e) => setSearchVal(e.target.value)}
-                                placeholder="Enter clearance code..."
-                                style={{
-                                    flex: 1,
-                                    padding: '12px 16px',
-                                    background: 'rgba(0,0,0,0.4)',
-                                    border: '1px solid var(--glass-border)',
-                                    borderRadius: '8px',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    outline: 'none',
-                                    transition: 'border-color 0.3s',
-                                    fontFamily: 'var(--font-mono)',
-                                }}
-                                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
-                                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--glass-border)'}
-                            />
-                            <button
-                                type="submit"
-                                style={{
-                                    padding: '12px 20px',
-                                    background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    fontWeight: 700,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s',
-                                }}
-                            >
-                                Access
-                            </button>
-                        </form>
-                        {searchMsg && (
-                            <p style={{ fontSize: '12px', color: 'var(--color-danger)', marginTop: '10px', animation: 'fadeIn 0.3s ease-out' }}>
-                                {searchMsg}
-                            </p>
-                        )}
                     </div>
                 </div>
             </main>
