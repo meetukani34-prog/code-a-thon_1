@@ -168,7 +168,11 @@ export default function StudentHostelView() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <Button variant="outline" className="w-full border-accent-primary/50 text-accent-primary hover:bg-accent-primary/10">
+              <Button 
+                onClick={() => alert("Complaint lodged successfully. A technician will be assigned shortly.")}
+                variant="outline" 
+                className="w-full border-accent-primary/50 text-accent-primary hover:bg-accent-primary/10"
+              >
                 Lodge New Complaint
               </Button>
               

@@ -138,7 +138,12 @@ export default function WardenHostelView() {
                 </div>
               )) : <div className="text-sm text-muted-foreground p-4 text-center">No active alerts.</div>}
             </div>
-            <Button className="w-full mt-4 bg-destructive/20 text-destructive hover:bg-destructive/30 border border-destructive/50">
+            <Button 
+              onClick={() => {
+                alert("EMERGENCY BROADCAST TRIGGERED: All wardens and security personnel have been notified.");
+              }}
+              className="w-full mt-4 bg-destructive/20 text-destructive hover:bg-destructive/30 border border-destructive/50"
+            >
               Trigger Emergency Broadcast
             </Button>
           </CardContent>
