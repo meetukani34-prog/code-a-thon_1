@@ -258,6 +258,89 @@ export default function DashboardPage() {
     );
   }
 
+  // ==================== FACULTY DASHBOARD ====================
+  if (role === 'faculty') {
+    return (
+      <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+        <div style={{ marginBottom: 'var(--space-xl)' }}>
+          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-xs)' }}>
+            Faculty Dashboard
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
+            Welcome, <strong style={{ color: 'var(--accent-primary)' }}>{userName}</strong>. Manage your classes and students.
+          </p>
+        </div>
+
+        {/* Faculty Stat Cards */}
+        <div className="grid-stats" style={{ marginBottom: 'var(--space-xl)' }}>
+          <StatCard label="Classes Today" value={3} icon="📅" color="var(--accent-secondary)" />
+          <StatCard label="Avg Attendance" value={88.5} suffix="%" icon="◎" color="var(--color-success)" decimals={1} />
+          <StatCard label="Pending Assignments" value={12} icon="✎" color="var(--color-warning)" />
+          <StatCard label="Messages" value={5} icon="✉️" color="var(--accent-primary)" />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
+          {/* Today's Classes */}
+          <GlassCard padding="lg" hover={false}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
+              Today's Classes
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              {[
+                { time: '09:00 AM', subject: 'Data Structures', room: 'CS-301', students: 60 },
+                { time: '11:00 AM', subject: 'Algorithms Lab', room: 'Lab-1', students: 30 },
+                { time: '02:00 PM', subject: 'Mentoring Session', room: 'Cabin 4', students: 5 },
+              ].map((cls, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 'var(--space-md)', padding: '12px 16px',
+                  background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-md)',
+                }}>
+                  <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--accent-primary)', fontWeight: 700, minWidth: '80px' }}>{cls.time}</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{cls.subject}</p>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{cls.room} • {cls.students} Students</p>
+                  </div>
+                  <button style={{
+                    padding: '6px 12px', background: 'var(--accent-primary)', color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px', cursor: 'pointer'
+                  }}>Start</button>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+
+          {/* Quick Actions */}
+          <GlassCard padding="lg" hover={false}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
+              Quick Actions
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              {[
+                { label: 'Mark Attendance', path: '/dashboard/attendance', icon: '◎', desc: 'Initialize class attendance' },
+                { label: 'Exam Grading', path: '/dashboard/exams', icon: '✎', desc: 'Update student marks' },
+                { label: 'Events', path: '/dashboard/events', icon: '★', desc: 'View upcoming events' },
+                { label: 'Class Analytics', path: '/dashboard/analytics', icon: '▦', desc: 'Student performance metrics' },
+              ].map(action => (
+                <a key={action.path} href={action.path} style={{
+                  display: 'flex', alignItems: 'center', gap: 'var(--space-md)', padding: '12px 16px',
+                  background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-md)',
+                  textDecoration: 'none', color: 'inherit', transition: 'all 0.3s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-primary)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.transform = 'translateX(0)'; }}>
+                  <span style={{ fontSize: '20px' }}>{action.icon}</span>
+                  <div>
+                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{action.label}</p>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{action.desc}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </GlassCard>
+        </div>
+      </div>
+    );
+  }
+
   // ==================== STUDENT DASHBOARD ====================
   return (
     <>
