@@ -385,6 +385,6 @@ export default function RoleAuthPage() {
                     <p className="slide-element">Create your clearance credentials to proceed.</p>
                 </div>
             </div>
-        </div>
+        </GridGlowBackground>
     );
 }
