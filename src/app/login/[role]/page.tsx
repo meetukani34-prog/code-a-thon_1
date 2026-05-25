@@ -153,7 +153,7 @@ export default function RoleAuthPage() {
     // Admin UI
     if (isAdminRole) {
         return (
-            <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#09090b]">
+            <GridGlowBackground backgroundColor="#050505" glowColors={["#ff003c", "#990000", "#ff003c"]}>
               <style>{`
                 .glowing-outer {
                   width: 100%;
@@ -163,13 +163,13 @@ export default function RoleAuthPage() {
                   padding: 1px;
                   overflow: hidden;
                   background: rgba(255, 255, 255, 0.03);
-                  box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+                  box-shadow: 0 0 40px rgba(255, 0, 60, 0.15);
                 }
                 .glowing-dot {
                   position: absolute;
                   width: 100px;
                   height: 100px;
-                  background: radial-gradient(circle, rgba(0, 212, 255, 0.8) 0%, rgba(157, 0, 255, 0.5) 40%, transparent 70%);
+                  background: radial-gradient(circle, rgba(255, 0, 60, 0.8) 0%, rgba(153, 0, 0, 0.5) 40%, transparent 70%);
                   filter: blur(8px);
                   animation: moveDot 6s linear infinite;
                   z-index: 0;
@@ -184,7 +184,7 @@ export default function RoleAuthPage() {
                 }
                 .glowing-card {
                   position: relative;
-                  background: rgba(10, 10, 12, 0.95);
+                  background: rgba(10, 5, 5, 0.95);
                   backdrop-filter: blur(20px);
                   -webkit-backdrop-filter: blur(20px);
                   border-radius: 15px;
@@ -199,36 +199,36 @@ export default function RoleAuthPage() {
                 }
                 .clean-input:focus {
                   background: rgba(255, 255, 255, 0.06) !important;
-                  border-color: rgba(0, 212, 255, 0.5) !important;
-                  box-shadow: 0 0 15px rgba(0, 212, 255, 0.15) !important;
+                  border-color: rgba(255, 0, 60, 0.5) !important;
+                  box-shadow: 0 0 15px rgba(255, 0, 60, 0.15) !important;
                   outline: none !important;
                 }
                 .clean-input::placeholder {
                   color: rgba(255, 255, 255, 0.4) !important;
                 }
                 .gradient-btn {
-                  background: linear-gradient(90deg, #00d4ff, #9d00ff) !important;
+                  background: linear-gradient(90deg, #ff003c, #990000) !important;
                   border: none !important;
                   color: white !important;
                   font-weight: 600 !important;
                   transition: all 0.3s ease !important;
                 }
                 .gradient-btn:hover {
-                  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
+                  box-shadow: 0 0 20px rgba(255, 0, 60, 0.4) !important;
                   transform: translateY(-2px) !important;
                   filter: brightness(1.1);
                 }
               `}</style>
 
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,212,255,0.05)_0%,_rgba(0,0,0,0)_70%)]"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,0,60,0.05)_0%,_rgba(0,0,0,0)_70%)] pointer-events-none"></div>
               
               <div className="glowing-outer z-10">
                 <div className="glowing-dot"></div>
                 <div className="glowing-card">
                   
                   <div className="text-center mb-8 relative z-20">
-                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center border border-cyan-500/30">
-                      <span className="text-cyan-400 text-xl">🛡️</span>
+                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-red-500/20 to-red-900/20 flex items-center justify-center border border-red-500/30">
+                      <span className="text-red-500 text-xl">⚠️</span>
                     </div>
                     <h2 className="text-2xl font-bold text-white tracking-wide">
                       ADMIN GATEWAY
@@ -290,14 +290,14 @@ export default function RoleAuthPage() {
                   </form>
                 </div>
               </div>
-            </div>
+            </GridGlowBackground>
           );
     }
 
     // Standard UI (Student/Faculty)
     return (
-        <div className="auth-body">
-            <div className={`auth-wrapper ${isToggled ? 'toggled' : ''}`}>
+        <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
+            <div className={`auth-wrapper relative z-20 mx-auto ${isToggled ? 'toggled' : ''}`}>
                 <div className="background-shape"></div>
                 <div className="secondary-shape"></div>
 
@@ -322,12 +322,12 @@ export default function RoleAuthPage() {
                         <button type="submit" className="submit-button" disabled={loading}>{loading ? 'Processing...' : 'Login'}</button>
                     </form>
                     <div className="switch-link slide-element">
-                        Don't have a {displayTitle} account? <a href="#" onClick={(e) => { e.preventDefault(); setIsToggled(true); }}>Sign Up</a>
+                        Don't have an account? <button type="button" onClick={() => setIsToggled(true)}>Sign up</button>
                     </div>
                 </div>
 
                 <div className="credentials-panel signup">
-                    <h2 className="slide-element">{displayTitle} Register</h2>
+                    <h2 className="slide-element">{displayTitle} Sign Up</h2>
                     <form className="slide-element" onSubmit={handleStandardAuth}>
                         <div className="field-wrapper">
                             <input type="text" id="signup-usn" name="signup-usn" placeholder=" " required value={usn} onChange={e => setUsn(e.target.value)} />
