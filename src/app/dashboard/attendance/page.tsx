@@ -10,27 +10,28 @@ export default function AttendancePage() {
   const [logs, setLogs] = useState<any[]>([]);
 
   useEffect(() => {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    
-    supabase.from('attendance')
-      .select('*, users:student_id(full_name)')
-      .order('recorded_at', { ascending: false })
-      .limit(10)
-      .then(({ data }) => setLogs(data || []));
+    // Mock initial data until SQL migration for attendance table is run
+    setLogs([
+      { users: { full_name: 'Anjali Desai' }, geo_verified: true, method: 'QR + GeoFencing' },
+      { users: { full_name: 'Rahul Sharma' }, geo_verified: false, method: 'Location Mismatch' }
+    ]);
 
-    // Subscribe to new attendance logs
-    const channel = supabase.channel('attendance_stream')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'attendance' }, (payload) => {
-        // We'd ideally fetch the user name here or handle joins in the stream, but for simplicity:
-        setLogs(prev => [{ ...payload.new, users: { full_name: 'Unknown Student' } }, ...prev].slice(0, 10));
-      }).subscribe();
+    // Mock real-time validations streaming in
+    const interval = setInterval(() => {
+      const isVerified = Math.random() > 0.2; // 80% chance of success
+      const methods = ['QR + GeoFencing', 'BLE Beacon', 'Campus WiFi'];
+      const failMethods = ['GPS Spoof Detected', 'IP Mismatch', 'Token Expired'];
       
-    return () => {
-      supabase.removeChannel(channel);
-    }
+      const newLog = {
+        users: { full_name: `Node ${Math.floor(Math.random() * 9000) + 1000}` },
+        geo_verified: isVerified,
+        method: isVerified ? methods[Math.floor(Math.random() * methods.length)] : failMethods[Math.floor(Math.random() * failMethods.length)]
+      };
+      
+      setLogs(prev => [newLog, ...prev].slice(0, 6));
+    }, 10000);
+      
+    return () => clearInterval(interval);
   }, []);
 
   // Simulate rolling QR token (4s rotation)
