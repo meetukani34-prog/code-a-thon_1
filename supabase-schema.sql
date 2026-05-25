@@ -135,3 +135,87 @@ INSERT INTO notifications (title, message, type, target_role) VALUES
 ('Placement Drive: Google', 'Google campus placement drive scheduled for June 25. Eligibility: > 8.0 CGPA, No backlogs.', 'info', 'student'),
 ('Attendance Warning', 'Students below 75% attendance will not be allowed to sit for end-semester exams.', 'warning', 'student'),
 ('Faculty Meeting', 'All faculty members are requested to attend the curriculum review meeting on June 5.', 'info', 'faculty');
+
+-- ============================================
+-- HOSTEL MODULE
+-- ============================================
+
+-- 6. HOSTEL ROOMS
+CREATE TABLE IF NOT EXISTS hostel_rooms (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  room_number TEXT NOT NULL,
+  block TEXT NOT NULL,
+  capacity INTEGER DEFAULT 2,
+  current_occupants INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 7. HOSTEL RESIDENTS
+CREATE TABLE IF NOT EXISTS hostel_residents (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id UUID REFERENCES auth.users(id),
+  student_name TEXT,
+  room_id UUID REFERENCES hostel_rooms(id),
+  mess_plan TEXT DEFAULT 'Standard Veg',
+  late_entries INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 8. HOSTEL LEAVES
+CREATE TABLE IF NOT EXISTS hostel_leaves (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id UUID REFERENCES auth.users(id),
+  student_name TEXT,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  reason TEXT,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 9. HOSTEL ALERTS
+CREATE TABLE IF NOT EXISTS hostel_alerts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id UUID REFERENCES auth.users(id),
+  student_name TEXT,
+  alert_type TEXT,
+  message TEXT,
+  status TEXT DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable RLS
+ALTER TABLE hostel_rooms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hostel_residents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hostel_leaves ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hostel_alerts ENABLE ROW LEVEL SECURITY;
+
+-- Policies
+CREATE POLICY "Anyone can read hostel_rooms" ON hostel_rooms FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert hostel_rooms" ON hostel_rooms FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can read hostel_residents" ON hostel_residents FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert hostel_residents" ON hostel_residents FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can read hostel_leaves" ON hostel_leaves FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert hostel_leaves" ON hostel_leaves FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can read hostel_alerts" ON hostel_alerts FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert hostel_alerts" ON hostel_alerts FOR INSERT WITH CHECK (true);
+
+-- Sample Data for Hostel
+INSERT INTO hostel_rooms (id, room_number, block, capacity, current_occupants) VALUES
+('11111111-1111-1111-1111-111111111111', 'A-402', 'Block A', 2, 1),
+('22222222-2222-2222-2222-222222222222', 'B-201', 'Block B', 2, 2),
+('33333333-3333-3333-3333-333333333333', 'C-302', 'Block C', 1, 1);
+
+INSERT INTO hostel_residents (student_name, room_id, mess_plan, late_entries) VALUES
+('Priya Patel', '11111111-1111-1111-1111-111111111111', 'Premium Veg Plan', 0),
+('Rahul Sharma', '22222222-2222-2222-2222-222222222222', 'Standard Veg', 1),
+('Arjun Mehta', '33333333-3333-3333-3333-333333333333', 'Non-Veg Plan', 3);
+
+INSERT INTO hostel_leaves (student_name, start_date, end_date, reason, status) VALUES
+('Anjali Desai', '2026-06-10', '2026-06-12', 'Medical Checkup', 'pending'),
+('Rahul Sharma', '2026-06-15', '2026-06-18', 'Family Function', 'pending'),
+('Priya Patel', '2026-05-20', '2026-05-21', 'Night Outpass (Tech Fest)', 'rejected');
+
+INSERT INTO hostel_alerts (student_name, alert_type, message, status) VALUES
+('Arjun Mehta', 'Late Entry', 'Late Entry at 11:45 PM', 'active'),
+('Priya Patel', 'Absence', 'Absent for 3 Days', 'active');

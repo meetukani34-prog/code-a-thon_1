@@ -1,10 +1,63 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { createClient } from '@/lib/supabase/client';
 
 export default function StudentHostelView() {
+  const [residentInfo, setResidentInfo] = useState<any>(null);
+  const [roomInfo, setRoomInfo] = useState<any>(null);
+  const [leaves, setLeaves] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // We'll use a mocked student name for demonstration if the user doesn't have one in DB yet.
+  const studentName = 'Priya Patel';
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const supabase = createClient();
+    
+    // Fetch resident info
+    const { data: residents } = await supabase
+      .from('hostel_residents')
+      .select('*, hostel_rooms(*)')
+      .eq('student_name', studentName)
+      .single();
+      
+    if (residents) {
+      setResidentInfo(residents);
+      if (residents.hostel_rooms) {
+        setRoomInfo(residents.hostel_rooms);
+      }
+    }
+
+    // Fetch leaves
+    const { data: myLeaves } = await supabase
+      .from('hostel_leaves')
+      .select('*')
+      .eq('student_name', studentName)
+      .order('created_at', { ascending: false });
+      
+    if (myLeaves) setLeaves(myLeaves);
+    
+    setLoading(false);
+  };
+
+  const handleNewLeave = async () => {
+    const supabase = createClient();
+    await supabase.from('hostel_leaves').insert([
+      { student_name: studentName, start_date: new Date().toISOString().split('T')[0], end_date: new Date(Date.now() + 86400000).toISOString().split('T')[0], reason: 'Weekend Home Visit', status: 'pending' }
+    ]);
+    fetchData();
+  };
+
+  if (loading) return <div className="p-8 text-center text-muted-foreground animate-pulse">Loading Live Data...</div>;
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Hostel Details */}
@@ -14,8 +67,8 @@ export default function StudentHostelView() {
             <CardTitle className="text-lg">Room Details</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-primary mb-1">A-402</div>
-            <div className="text-xs text-muted-foreground">Block A • 4th Floor • 2 Seater</div>
+            <div className="text-3xl font-black text-primary mb-1">{roomInfo?.room_number || 'Unassigned'}</div>
+            <div className="text-xs text-muted-foreground">{roomInfo?.block || 'Block X'} • {roomInfo?.capacity || 2} Seater</div>
           </CardContent>
         </Card>
 
@@ -25,7 +78,7 @@ export default function StudentHostelView() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-emerald-400 mb-1">Active</div>
-            <div className="text-xs text-muted-foreground">Premium Veg Plan</div>
+            <div className="text-xs text-muted-foreground">{residentInfo?.mess_plan || 'Standard Veg'}</div>
           </CardContent>
         </Card>
 
@@ -34,7 +87,7 @@ export default function StudentHostelView() {
             <CardTitle className="text-lg text-destructive">Late Entries</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-destructive mb-1">2 / 3</div>
+            <div className="text-3xl font-black text-destructive mb-1">{residentInfo?.late_entries || 0} / 3</div>
             <div className="text-xs text-muted-foreground">Warnings this month. 3rd warning alerts parents.</div>
           </CardContent>
         </Card>
@@ -50,26 +103,27 @@ export default function StudentHostelView() {
           <CardContent>
             <div className="space-y-4">
               <div className="grid gap-2">
-                <Button className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50">
+                <Button onClick={handleNewLeave} className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50">
                   + New Leave Request
                 </Button>
               </div>
               <h4 className="font-medium text-sm mt-4 mb-2 text-muted-foreground">Recent Requests</h4>
               <div className="space-y-2">
-                <div className="p-3 rounded-lg bg-black/20 border border-white/5 flex justify-between items-center">
-                  <div>
-                    <div className="font-medium text-sm">Weekend Home Visit</div>
-                    <div className="text-xs text-muted-foreground">June 12 - June 14</div>
+                {leaves.length > 0 ? leaves.map((leave) => (
+                  <div key={leave.id} className="p-3 rounded-lg bg-black/20 border border-white/5 flex justify-between items-center">
+                    <div>
+                      <div className="font-medium text-sm">{leave.reason}</div>
+                      <div className="text-xs text-muted-foreground">{leave.start_date} to {leave.end_date}</div>
+                    </div>
+                    {leave.status === 'approved' ? (
+                      <Badge className="bg-emerald-500/20 text-emerald-400 border-none">Approved</Badge>
+                    ) : leave.status === 'rejected' ? (
+                      <Badge variant="outline" className="text-destructive border-destructive/50 text-xs">Rejected</Badge>
+                    ) : (
+                      <Badge className="bg-yellow-500/20 text-yellow-400 border-none">Pending</Badge>
+                    )}
                   </div>
-                  <Badge className="bg-emerald-500/20 text-emerald-400 border-none">Approved</Badge>
-                </div>
-                <div className="p-3 rounded-lg bg-black/20 border border-white/5 flex justify-between items-center">
-                  <div>
-                    <div className="font-medium text-sm">Night Outpass (Tech Fest)</div>
-                    <div className="text-xs text-muted-foreground">May 20 - May 21</div>
-                  </div>
-                  <Badge variant="outline" className="text-destructive border-destructive/50 text-xs">Rejected</Badge>
-                </div>
+                )) : <div className="text-xs text-muted-foreground text-center">No leave requests found.</div>}
               </div>
             </div>
           </CardContent>
