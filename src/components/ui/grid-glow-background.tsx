@@ -23,9 +23,9 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = canvasRef.current as HTMLCanvasElement;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
 
     let glows: Glow[] = [];
@@ -43,9 +43,9 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
 
       constructor() {
         this.x =
-          Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+          Math.floor(Math.random() * (canvas!.width / gridSize)) * gridSize;
         this.y =
-          Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
+          Math.floor(Math.random() * (canvas!.height / gridSize)) * gridSize;
         this.targetX = this.x;
         this.targetY = this.y;
         this.radius = Math.random() * 120 + 60;
@@ -59,9 +59,9 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
 
       setNewTarget() {
         this.targetX =
-          Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+          Math.floor(Math.random() * (canvas!.width / gridSize)) * gridSize;
         this.targetY =
-          Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
+          Math.floor(Math.random() * (canvas!.height / gridSize)) * gridSize;
       }
 
       update() {
@@ -98,30 +98,30 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
     }
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas!.width = window.innerWidth;
+      canvas!.height = window.innerHeight;
       glows = Array.from({ length: glowCount }, () => new Glow());
     };
 
     const drawGrid = () => {
       ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
-      for (let x = 0; x < canvas.width; x += gridSize) {
+      for (let x = 0; x < canvas!.width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, canvas!.height);
         ctx.stroke();
       }
-      for (let y = 0; y < canvas.height; y += gridSize) {
+      for (let y = 0; y < canvas!.height; y += gridSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.lineTo(canvas!.width, y);
         ctx.stroke();
       }
     };
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas!.width, canvas!.height);
       drawGrid();
       ctx.globalCompositeOperation = "screen";
       glows.forEach((g) => {
