@@ -26,7 +26,7 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
       top: 0,
       bottom: 0,
       width: 'var(--sidebar-width)',
-      background: 'rgba(10, 12, 20, 0.85)',
+      background: 'rgba(26, 26, 46, 0.85)',
       backdropFilter: 'blur(40px)',
       WebkitBackdropFilter: 'blur(40px)',
       borderRight: '1px solid var(--glass-border)',

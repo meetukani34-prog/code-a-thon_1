@@ -47,17 +47,17 @@
    CSS Custom Properties
    ===================== */
 :root {
-  /* Core Palette — Deep Space Theme */
-  --bg-primary: hsl(225, 25%, 6%);
-  --bg-secondary: hsl(225, 20%, 10%);
-  --bg-tertiary: hsl(225, 18%, 14%);
-  --bg-elevated: hsl(225, 15%, 18%);
+  /* Core Palette — Navy Theme */
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #151525;
+  --bg-tertiary: #202038;
+  --bg-elevated: #262640;
   
   /* Accent Colors */
-  --accent-primary: hsl(210, 100%, 60%);
-  --accent-primary-dim: hsl(210, 100%, 40%);
-  --accent-secondary: hsl(280, 80%, 65%);
-  --accent-tertiary: hsl(170, 80%, 50%);
+  --accent-primary: #00d4ff;
+  --accent-primary-dim: #0099cc;
+  --accent-secondary: #66e0ff;
+  --accent-tertiary: #ccf5ff;
   
   /* Status Colors */
   --color-success: hsl(145, 80%, 50%);
@@ -81,11 +81,11 @@
   --glass-blur-heavy: 40px;
   
   /* Glow Effects */
-  --glow-primary: 0 0 20px hsla(210, 100%, 60%, 0.3), 0 0 60px hsla(210, 100%, 60%, 0.1);
+  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.3), 0 0 60px rgba(0, 212, 255, 0.1);
   --glow-danger: 0 0 20px hsla(0, 85%, 55%, 0.3), 0 0 60px hsla(0, 85%, 55%, 0.1);
   --glow-success: 0 0 20px hsla(145, 80%, 50%, 0.3), 0 0 60px hsla(145, 80%, 50%, 0.1);
   --glow-warning: 0 0 20px hsla(35, 95%, 55%, 0.3), 0 0 60px hsla(35, 95%, 55%, 0.1);
-  --glow-info: 0 0 20px hsla(210, 100%, 60%, 0.2);
+  --glow-info: 0 0 20px rgba(0, 212, 255, 0.2);
   --glow-debug: 0 0 20px hsla(260, 70%, 60%, 0.2);
   
   /* Spacing */
@@ -170,9 +170,9 @@ body::before {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at 20% 50%, hsla(210, 100%, 50%, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, hsla(280, 80%, 50%, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, hsla(170, 80%, 50%, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(102, 224, 255, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(204, 245, 255, 0.03) 0%, transparent 50%);
   animation: bgShift 20s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
