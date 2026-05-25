@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import StatCard from '@/components/ui/StatCard';
 import GlassCard from '@/components/ui/GlassCard';
+import NeuralBackground from '@/components/ui/flow-field-background';
 import { createBrowserClient } from '@supabase/ssr';
 
 export default function DashboardPage() {
@@ -260,12 +261,13 @@ export default function DashboardPage() {
   // ==================== STUDENT DASHBOARD ====================
   return (
     <>
-      {/* 3D Fluid CSS Background */}
-      <div className="fluid-3d-container" style={{ position: 'fixed', zIndex: -1 }}>
-        <div className="fluid-fold fluid-fold-1"></div>
-        <div className="fluid-fold fluid-fold-2"></div>
-        <div className="fluid-fold fluid-fold-3"></div>
-        <div className="fluid-overlay"></div>
+      {/* 3D Fluid Canvas Background */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }}>
+        <NeuralBackground 
+          color="#818cf8" 
+          trailOpacity={0.1} 
+          speed={0.8}
+        />
       </div>
 
       <div className="content-front" style={{ animation: 'fadeIn 0.5s ease-out' }}>
