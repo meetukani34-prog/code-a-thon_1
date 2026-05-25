@@ -158,37 +158,6 @@ export default function AuthPage() {
                     <h2 className="slide-element">Welcome!</h2>
                     <p className="slide-element">Join us and start your amazing journey.</p>
                 </div>
-
-                {/* HACKATHON DEMO SHORTCUTS */}
-                <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000, display: 'flex', gap: '5px' }}>
-                    <button onClick={async () => {
-                        const s = createClient();
-                        await s.auth.signUp({ email: 'student@demo.com', password: 'demo', options: { data: { role: 'student', full_name: 'Demo Student' } } });
-                        await s.auth.signInWithPassword({ email: 'student@demo.com', password: 'demo' });
-                        router.push('/dashboard');
-                    }} style={{ padding: '5px 10px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '10px', cursor: 'pointer' }}>Student Demo</button>
-                    
-                    <button onClick={async () => {
-                        const s = createClient();
-                        await s.auth.signUp({ email: 'faculty@demo.com', password: 'demo', options: { data: { role: 'faculty', full_name: 'Demo Faculty' } } });
-                        await s.auth.signInWithPassword({ email: 'faculty@demo.com', password: 'demo' });
-                        router.push('/dashboard');
-                    }} style={{ padding: '5px 10px', background: 'rgba(0,0,0,0.5)', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '10px', cursor: 'pointer' }}>Faculty Demo</button>
-
-                    <button onClick={async () => {
-                        const s = createClient();
-                        await s.auth.signUp({ email: 'admin@demo.com', password: 'demo', options: { data: { role: 'admin', full_name: 'Demo Admin' } } });
-                        await s.auth.signInWithPassword({ email: 'admin@demo.com', password: 'demo' });
-                        router.push('/dashboard');
-                    }} style={{ padding: '5px 10px', background: 'var(--accent-primary)', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '10px', cursor: 'pointer' }}>Admin Demo</button>
-
-                    <button onClick={async () => {
-                        const s = createClient();
-                        await s.auth.signUp({ email: 'superadmin@demo.com', password: 'demo', options: { data: { role: 'superadmin', full_name: 'Demo Superadmin' } } });
-                        await s.auth.signInWithPassword({ email: 'superadmin@demo.com', password: 'demo' });
-                        router.push('/dashboard/superadmin/add-admin');
-                    }} style={{ padding: '5px 10px', background: 'var(--color-danger)', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '10px', cursor: 'pointer' }}>Superadmin Demo</button>
-                </div>
             </div>
         </div>
     );
