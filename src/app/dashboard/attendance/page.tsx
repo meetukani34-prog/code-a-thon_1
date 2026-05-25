@@ -1,13 +1,36 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import GlassCard from '@/components/ui/GlassCard';
 import { createBrowserClient } from '@supabase/ssr';
+import Webcam from 'react-webcam';
 
 export default function AttendancePage() {
   const [qrToken, setQrToken] = useState('GENERATING_SECURE_TOKEN...');
   const [timeLeft, setTimeLeft] = useState(4);
   const [logs, setLogs] = useState<any[]>([]);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<'idle'|'success'|'error'>('idle');
+  const webcamRef = useRef<Webcam>(null);
+
+  const startScan = useCallback(() => {
+    setIsScanning(true);
+    setScanResult('idle');
+    // Simulate a 3 second AI facial recognition scan
+    setTimeout(() => {
+      setIsScanning(false);
+      setScanResult('success');
+      
+      // Add fake successful log to stream
+      setLogs(prev => [
+        { users: { full_name: 'Authorized Admin (Face ID)' }, geo_verified: true, method: 'Biometric Face Match' },
+        ...prev
+      ].slice(0, 6));
+
+      // Reset after a few seconds
+      setTimeout(() => setScanResult('idle'), 5000);
+    }, 3000);
+  }, []);
 
   useEffect(() => {
     // Mock initial data until SQL migration for attendance table is run
@@ -79,58 +102,105 @@ export default function AttendancePage() {
         <GlassCard padding="lg" hover={false}>
           <div style={{ textAlign: 'center' }}>
             <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-xl)' }}>
-              Active Session Token
+              Biometric Liveness Detection
             </h3>
 
-            {/* Fake QR visualizer */}
+            {/* Webcam Scanner */}
             <div style={{
-              width: 240,
-              height: 240,
+              width: 280,
+              height: 280,
               margin: '0 auto',
-              background: 'white',
-              padding: 20,
-              borderRadius: 'var(--radius-lg)',
+              background: 'black',
+              borderRadius: 'var(--radius-xl)',
               position: 'relative',
-              boxShadow: 'var(--glow-primary)',
+              overflow: 'hidden',
+              boxShadow: scanResult === 'success' ? '0 0 40px var(--color-success)' : 'var(--glow-primary)',
+              border: `2px solid ${scanResult === 'success' ? 'var(--color-success)' : 'var(--glass-border)'}`,
+              transition: 'all 0.5s ease'
             }}>
-              <div style={{
-                width: '100%',
-                height: '100%',
-                background: `repeating-linear-gradient(45deg, var(--bg-primary) 0, var(--bg-primary) 10px, transparent 10px, transparent 20px),
-                             repeating-linear-gradient(-45deg, var(--bg-primary) 0, var(--bg-primary) 10px, transparent 10px, transparent 20px)`,
-                opacity: 0.8,
-              }} />
-              {/* Scanning laser line */}
+              <Webcam
+                ref={webcamRef}
+                audio={false}
+                screenshotFormat="image/jpeg"
+                videoConstraints={{ facingMode: "user" }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+
+              {/* Grid overlay */}
               <div style={{
                 position: 'absolute',
-                top: '50%',
-                left: 10,
-                right: 10,
-                height: 2,
-                background: 'var(--color-danger)',
-                boxShadow: 'var(--glow-danger)',
-                animation: 'float 2s ease-in-out infinite',
+                inset: 0,
+                background: `repeating-linear-gradient(transparent, transparent 2px, rgba(0,0,0,0.2) 3px, rgba(0,0,0,0.2) 4px)`,
+                pointerEvents: 'none',
+                opacity: 0.5,
               }} />
+
+              {/* Scanning laser line */}
+              {isScanning && (
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 3,
+                  background: 'var(--accent-secondary)',
+                  boxShadow: '0 0 20px 4px var(--accent-secondary)',
+                  animation: 'scan 1.5s ease-in-out infinite alternate',
+                  zIndex: 10,
+                }} />
+              )}
+
+              {/* Facial alignment guides */}
+              <div style={{
+                position: 'absolute',
+                top: '20%', bottom: '20%', left: '20%', right: '20%',
+                border: `2px dashed ${scanResult === 'success' ? 'var(--color-success)' : isScanning ? 'var(--accent-secondary)' : 'rgba(255,255,255,0.3)'}`,
+                borderRadius: '50%',
+                transition: 'border-color 0.3s ease',
+              }} />
+              
+              {/* Success Overlay */}
+              {scanResult === 'success' && (
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'rgba(16, 185, 129, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backdropFilter: 'blur(2px)',
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '3rem', marginBottom: '8px' }}>✅</div>
+                    <p style={{ color: 'white', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>IDENTITY VERIFIED</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div style={{ marginTop: 'var(--space-xl)' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--accent-primary)', wordBreak: 'break-all' }}>
-                {qrToken}
-              </p>
+              <button
+                onClick={startScan}
+                disabled={isScanning || scanResult === 'success'}
+                style={{
+                  padding: '12px 24px',
+                  background: isScanning ? 'transparent' : 'var(--accent-primary)',
+                  border: isScanning ? '1px solid var(--accent-primary)' : 'none',
+                  color: 'white',
+                  borderRadius: 'var(--radius-md)',
+                  fontWeight: 700,
+                  letterSpacing: '1px',
+                  cursor: isScanning || scanResult === 'success' ? 'not-allowed' : 'pointer',
+                  textTransform: 'uppercase',
+                  fontSize: '12px',
+                  boxShadow: isScanning ? 'none' : 'var(--glow-primary)',
+                  transition: 'all 0.3s',
+                  width: '100%',
+                }}
+              >
+                {isScanning ? 'Extracting Vector Nodes...' : scanResult === 'success' ? 'Node Verified' : 'Initialize Face Scan'}
+              </button>
             </div>
-
-            {/* Progress bar */}
-            <div style={{ marginTop: 'var(--space-md)', background: 'rgba(255,255,255,0.1)', height: 4, borderRadius: 2, overflow: 'hidden' }}>
-              <div style={{
-                height: '100%',
-                background: timeLeft < 1.5 ? 'var(--color-danger)' : 'var(--accent-primary)',
-                width: `${(timeLeft / 4) * 100}%`,
-                transition: 'width 0.1s linear, background-color 0.3s ease',
-              }} />
-            </div>
-            <p style={{ marginTop: 'var(--space-xs)', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              Rotates in {timeLeft.toFixed(1)}s
-            </p>
           </div>
         </GlassCard>
 

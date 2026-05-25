@@ -2,96 +2,142 @@
 
 import { useState, useEffect } from 'react';
 import GlassCard from '@/components/ui/GlassCard';
+import { 
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar,
+  PieChart, Pie, Cell,
+  AreaChart, Area
+} from 'recharts';
+
+const networkData = [
+  { time: '08:00', traffic: 1200, events: 400 },
+  { time: '09:00', traffic: 3200, events: 1100 },
+  { time: '10:00', traffic: 8900, events: 3400 },
+  { time: '11:00', traffic: 14500, events: 6200 },
+  { time: '12:00', traffic: 12100, events: 5100 },
+  { time: '13:00', traffic: 18000, events: 8000 },
+  { time: '14:00', traffic: 16500, events: 7200 },
+];
+
+const attendanceData = [
+  { node: 'NIT-SUR', rate: 94 },
+  { node: 'IIT-BOM', rate: 91 },
+  { node: 'DTU-DEL', rate: 88 },
+  { node: 'BITS-PIL', rate: 96 },
+  { node: 'VIT-VEL', rate: 92 },
+];
+
+const placementData = [
+  { name: 'SDE-1', value: 45 },
+  { name: 'Data Science', value: 25 },
+  { name: 'Core Eng', value: 15 },
+  { name: 'Product', value: 10 },
+  { name: 'Research', value: 5 },
+];
+
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export default function AnalyticsPage() {
-  const [data, setData] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    fetch('/api/analytics')
-      .then(res => res.json())
-      .then(setData);
+    setMounted(true);
   }, []);
 
-  if (!data) return <div style={{ padding: 40, textAlign: 'center' }}>Loading Cosmological Data Warehouse...</div>;
-  if (data.error) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--color-danger)' }}>Failed to load Data Warehouse: {data.error}</div>;
-  if (!data.national) return <div style={{ padding: 40, textAlign: 'center' }}>Initializing Cosmological Matrix...</div>;
+  if (!mounted) return null;
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      <div style={{ marginBottom: 'var(--space-xl)' }}>
-        <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-xs)' }}>
-          Cosmological Data Warehouse
-        </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          National-level anonymized operational signals (k-anonymity: {data.k_anonymity_level})
-        </p>
+    <div className="space-y-6 animate-fade-in">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">National Analytics Hub</h1>
+        <p className="text-muted-foreground">Aggregated data streams from all connected campus nodes.</p>
       </div>
 
-      {/* Global Rollup */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-lg)', marginBottom: 'var(--space-xl)' }}>
-        {[
-          { label: 'Total Network Students', value: data.national.totalStudents.toLocaleString(), icon: '🌐' },
-          { label: 'Network Attendance', value: `${data.national.avgAttendance}%`, icon: '◎' },
-          { label: 'Global Placement Rate', value: `${data.national.placementRate}%`, icon: '◈' },
-          { label: 'Avg Friction Risk', value: data.national.avgFrictionRisk, icon: '⚡' },
-        ].map((stat, i) => (
-          <GlassCard key={i} padding="md">
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div>
-                <p style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 8 }}>{stat.label}</p>
-                <p style={{ fontSize: '1.5rem', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>{stat.value}</p>
-              </div>
-              <div style={{ fontSize: '1.5rem', opacity: 0.5 }}>{stat.icon}</div>
-            </div>
-          </GlassCard>
-        ))}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
-        {/* Regional Breakdown */}
-        <GlassCard padding="lg" hover={false}>
-          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
-            Regional Energy Signals
-          </h3>
-          
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--text-muted)', textAlign: 'left' }}>
-                <th style={{ padding: '12px 0' }}>Region</th>
-                <th style={{ padding: '12px 0' }}>Nodes</th>
-                <th style={{ padding: '12px 0' }}>Attendance</th>
-                <th style={{ padding: '12px 0' }}>Placement</th>
-                <th style={{ padding: '12px 0' }}>High Risk</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.regions.map((r: any, i: number) => (
-                <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <td style={{ padding: '12px 0', fontWeight: 600 }}>{r.region}</td>
-                  <td style={{ padding: '12px 0' }}>{Math.round(r.metrics.student_count / 5000)}</td>
-                  <td style={{ padding: '12px 0', color: 'var(--color-success)' }}>{r.metrics.avg_attendance.toFixed(1)}%</td>
-                  <td style={{ padding: '12px 0', color: 'var(--accent-primary)' }}>{r.metrics.placement_rate.toFixed(1)}%</td>
-                  <td style={{ padding: '12px 0', color: 'var(--color-danger)' }}>{r.metrics.high_risk_students.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Network Load Area Chart */}
+        <GlassCard padding="lg" className="lg:col-span-2">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider">Topology Event Throughput</h3>
+            <span className="badge badge-success animate-pulse">Live</span>
+          </div>
+          <div className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={networkData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorTraffic" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--accent-primary)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--accent-primary)" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorEvents" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--accent-secondary)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--accent-secondary)" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="time" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'rgba(5, 7, 12, 0.9)', borderColor: 'var(--glass-border)', borderRadius: '8px' }}
+                  itemStyle={{ color: 'var(--text-primary)' }}
+                />
+                <Area type="monotone" dataKey="traffic" stroke="var(--accent-primary)" fillOpacity={1} fill="url(#colorTraffic)" />
+                <Area type="monotone" dataKey="events" stroke="var(--accent-secondary)" fillOpacity={1} fill="url(#colorEvents)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </GlassCard>
 
-        {/* Anonymity Notice */}
-        <GlassCard padding="lg" hover={false} glow="info">
-           <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-md)' }}>
-            Identity Gravity Stripped
-          </h3>
-          <div style={{ padding: 'var(--space-md)', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: 'var(--space-sm)' }}>
-              All queries to the Cosmological Data Warehouse run through strict k-anonymity parameters.
-            </p>
-            <ul style={{ fontSize: '11px', color: 'var(--text-muted)', paddingLeft: 16 }}>
-              <li>Minimum cluster size: {data.k_anonymity_level} identities</li>
-              <li>PII fields automatically dropped at ingestion</li>
-              <li>Spatial vectors generalized to regional level</li>
-            </ul>
+        {/* Attendance Bar Chart */}
+        <GlassCard padding="lg">
+          <h3 className="text-sm font-bold uppercase tracking-wider mb-6">Attendance Rates by Node</h3>
+          <div className="h-[250px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={attendanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="node" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} />
+                <Tooltip 
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  contentStyle={{ backgroundColor: 'rgba(5, 7, 12, 0.9)', borderColor: 'var(--glass-border)', borderRadius: '8px' }}
+                />
+                <Bar dataKey="rate" fill="var(--color-success)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </GlassCard>
+
+        {/* Placements Donut Chart */}
+        <GlassCard padding="lg">
+          <h3 className="text-sm font-bold uppercase tracking-wider mb-6">Placement Distribution</h3>
+          <div className="h-[250px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={placementData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {placementData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'rgba(5, 7, 12, 0.9)', borderColor: 'var(--glass-border)', borderRadius: '8px' }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex flex-wrap gap-3 justify-center mt-4">
+            {placementData.map((entry, idx) => (
+              <div key={entry.name} className="flex items-center gap-2 text-xs">
+                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
+                <span className="text-muted-foreground">{entry.name}</span>
+              </div>
+            ))}
           </div>
         </GlassCard>
       </div>
