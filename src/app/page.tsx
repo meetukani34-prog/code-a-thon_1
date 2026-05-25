@@ -13,6 +13,7 @@ export default function LandingPage() {
   const [usn, setUsn] = useState('');
   const [fullName, setFullName] = useState('');
   const [branch, setBranch] = useState('DS(Data Science)');
+  const [role, setRole] = useState('student');
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +40,7 @@ export default function LandingPage() {
             full_name: fullName,
             usn,
             branch,
-            role: 'student'
+            role: role
           }
         }
       });
@@ -249,6 +250,23 @@ export default function LandingPage() {
                 <option value="CS(Computer Science)" style={{ color: 'black' }}>CS (Computer Science)</option>
                 <option value="EC(Electronics)" style={{ color: 'black' }}>EC (Electronics)</option>
                 <option value="ME(Mechanical)" style={{ color: 'black' }}>ME (Mechanical)</option>
+              </select>
+            </div>
+          )}
+
+          {!isLogin && (
+            <div style={{ marginBottom: 'var(--space-xl)' }}>
+              <label style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: 6 }}>
+                Account Role
+              </label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                style={{ width: '100%', padding: '10px 14px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-md)', color: 'white', fontSize: '14px', outline: 'none', appearance: 'none', cursor: 'pointer' }}
+              >
+                <option value="student" style={{ color: 'black' }}>Student</option>
+                <option value="faculty" style={{ color: 'black' }}>Faculty / Professor</option>
+                <option value="warden" style={{ color: 'black' }}>Hostel Warden</option>
               </select>
             </div>
           )}
