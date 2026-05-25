@@ -10,6 +10,7 @@ export default function DashboardPage() {
   const [role, setRole] = useState('');
   const [userName, setUserName] = useState('');
   const [mounted, setMounted] = useState(false);
+  const [loadingRole, setLoadingRole] = useState(true);
   const [userCount, setUserCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [facultyCount, setFacultyCount] = useState(0);
@@ -23,23 +24,33 @@ export default function DashboardPage() {
     );
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
-        setRole(data.session.user.user_metadata?.role || 'student');
+        const rawRole = data.session.user.user_metadata?.role || 'student';
+        setRole(rawRole.toLowerCase());
         setUserName(data.session.user.user_metadata?.full_name || data.session.user.email?.split('@')[0] || 'User');
+      } else {
+        setRole('student');
       }
+      setLoadingRole(false);
     });
 
     // Fetch user stats for admin
     fetch('/api/admin/users').then(r => r.json()).then(data => {
       if (data.users) {
         setUserCount(data.users.length);
-        setAdminCount(data.users.filter((u: any) => u.user_metadata?.role === 'admin').length);
-        setFacultyCount(data.users.filter((u: any) => u.user_metadata?.role === 'faculty').length);
-        setStudentCount(data.users.filter((u: any) => u.user_metadata?.role === 'student' || !u.user_metadata?.role).length);
+        setAdminCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'admin').length);
+        setFacultyCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'faculty').length);
+        setStudentCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'student' || !u.user_metadata?.role).length);
       }
     }).catch(() => {});
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || loadingRole) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid var(--glass-border)', borderTopColor: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
+      </div>
+    );
+  }
 
   // ==================== SUPERADMIN DASHBOARD ====================
   if (role === 'superadmin') {
