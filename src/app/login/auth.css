@@ -166,8 +166,12 @@
 .field-wrapper select:focus~label,
 .field-wrapper select:valid~label {
     top: -5px;
-    color: #00d4ff;
     font-size: 12px;
+}
+
+.field-wrapper input:focus~label,
+.field-wrapper select:focus~label {
+    color: #00d4ff;
 }
 
 .field-wrapper i {
@@ -186,11 +190,7 @@
 }
 
 .field-wrapper input:focus~i,
-.field-wrapper input:valid~i,
-.field-wrapper input:not(:placeholder-shown)~i,
-.field-wrapper input:-webkit-autofill~i,
-.field-wrapper select:focus~i,
-.field-wrapper select:valid~i {
+.field-wrapper select:focus~i {
     color: #00d4ff;
 }
 

@@ -5,12 +5,14 @@ import Link from 'next/link';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: '◉', path: '/dashboard' },
-  { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', adminOnly: true },
-  { id: 'admin-campuses', label: 'Campus Nodes', icon: '🌍', path: '/dashboard/admin/campuses', adminOnly: true },
+  { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'admin-campuses', label: 'Campus Nodes', icon: '🌍', path: '/dashboard/admin/campuses', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'add-faculty', label: 'Add Faculty', icon: '👨‍🏫', path: '/dashboard/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'add-admin', label: 'Add Admin', icon: '👑', path: '/dashboard/superadmin/add-admin', allowedRoles: ['superadmin'] },
   { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/dashboard/exams' },
   { id: 'events', label: 'Events Portal', icon: '★', path: '/dashboard/events' },
   { id: 'attendance', label: 'Attendance', icon: '◎', path: '/dashboard/attendance' },
-  { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements' },
+  { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements', allowedRoles: ['admin', 'superadmin'] },
   { id: 'timetable', label: 'Timetable', icon: '▦', path: '/dashboard/timetable' },
   { id: 'transport', label: 'Transport', icon: '◬', path: '/dashboard/transport' },
   { id: 'analytics', label: 'Analytics', icon: '◫', path: '/dashboard/analytics' },
@@ -88,7 +90,7 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
       }}>
         {navItems.map((item) => {
           // RBAC Check
-          if (item.adminOnly && role !== 'admin') return null;
+          if (item.allowedRoles && !item.allowedRoles.includes(role)) return null;
           
           const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname?.startsWith(item.path));
           return (
