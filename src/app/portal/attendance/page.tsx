@@ -15,6 +15,7 @@ export default function AttendancePage() {
   // Student State
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureStatus, setCaptureStatus] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('timetable');
 
   // Admin State
   const [qrToken, setQrToken] = useState('GENERATING_SECURE_TOKEN...');
@@ -352,8 +353,7 @@ export default function AttendancePage() {
     );
   }
 
-  // Student View Tab State
-  const [activeTab, setActiveTab] = useState('timetable');
+  // Student View Tab State (Moved to top to fix Hooks error)
 
   // Student View
   return (
