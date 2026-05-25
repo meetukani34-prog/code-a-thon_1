@@ -151,10 +151,20 @@ export default function EventsPortal() {
             </div>
             <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: '8px' }}>{event.title}</h3>
             <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 'var(--space-md)', lineHeight: 1.5 }}>{event.description}</p>
-            <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: 'var(--space-sm)' }}>
+            <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>📅 {event.date} • ⏰ {event.time}</p>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>📍 {event.venue}</p>
             </div>
+            
+            {role !== 'admin' && (
+              <button style={{
+                width: '100%', padding: '8px', background: 'var(--accent-primary)', border: 'none',
+                borderRadius: 'var(--radius-md)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '12px',
+                transition: 'background 0.3s'
+              }} onMouseOver={e => e.currentTarget.style.background = 'var(--accent-secondary)'} onMouseOut={e => e.currentTarget.style.background = 'var(--accent-primary)'}>
+                Register for Event
+              </button>
+            )}
           </GlassCard>
         ))}
       </div>
@@ -163,6 +173,34 @@ export default function EventsPortal() {
         <GlassCard padding="lg" hover={false} style={{ textAlign: 'center' }}>
           <p style={{ color: 'var(--text-muted)' }}>No events scheduled yet.</p>
         </GlassCard>
+      )}
+
+      {/* Student Certificates */}
+      {role !== 'admin' && (
+        <div style={{ marginTop: 'var(--space-2xl)' }}>
+          <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 800, marginBottom: 'var(--space-lg)', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ color: 'var(--color-success)' }}>🏆</span> My Certificates
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+            <GlassCard padding="lg" hover={false} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', border: '1px solid rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.05)' }}>
+              <div style={{ fontSize: '2rem' }}>🏅</div>
+              <div>
+                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-success)' }}>Winner - Hackathon 2025</h4>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 4 }}>Issued by: Coding Club • Aug 2025</p>
+              </div>
+              <button style={{ marginLeft: 'auto', padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-success)', color: 'var(--color-success)', borderRadius: 'var(--radius-sm)', fontSize: '11px', cursor: 'pointer' }}>Download PDF</button>
+            </GlassCard>
+
+            <GlassCard padding="lg" hover={false} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', border: '1px solid var(--glass-border)' }}>
+              <div style={{ fontSize: '2rem' }}>📜</div>
+              <div>
+                <h4 style={{ fontSize: '14px', fontWeight: 700 }}>Participant - AI Workshop</h4>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 4 }}>Issued by: Tech Dept • Nov 2025</p>
+              </div>
+              <button style={{ marginLeft: 'auto', padding: '6px 12px', background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', borderRadius: 'var(--radius-sm)', fontSize: '11px', cursor: 'pointer' }}>Download PDF</button>
+            </GlassCard>
+          </div>
+        </div>
       )}
     </div>
   );

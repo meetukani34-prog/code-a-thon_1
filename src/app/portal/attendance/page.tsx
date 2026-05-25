@@ -352,92 +352,172 @@ export default function AttendancePage() {
     );
   }
 
+  // Student View Tab State
+  const [activeTab, setActiveTab] = useState('attendance');
+
   // Student View
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ marginBottom: 'var(--space-xl)' }}>
         <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-xs)' }}>
-          Attendance Tracking
+          <span style={{ color: 'var(--accent-primary)', marginRight: 8 }}>◎</span>
+          Academics Hub
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Track your course attendance and validate thresholds
+          Manage your attendance, class schedules, and academic assignments.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)' }}>
-        
-        <GlassCard padding="lg" hover={false}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h3 style={{ fontSize: 'var(--text-md)', fontWeight: 700, marginBottom: '4px' }}>Capture Live Attendance</h3>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Scan for faculty Bluetooth beacon to log your presence.</p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-              {captureStatus && <span style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 600 }}>{captureStatus}</span>}
-              <button
-                onClick={captureAttendance}
-                disabled={isCapturing}
-                style={{
-                  padding: '10px 24px',
-                  background: isCapturing ? 'transparent' : 'var(--accent-primary)',
-                  border: isCapturing ? '1px solid var(--accent-primary)' : 'none',
-                  color: 'white',
-                  borderRadius: 'var(--radius-md)',
-                  fontWeight: 600,
-                  cursor: isCapturing ? 'not-allowed' : 'pointer',
-                }}
-              >
-                {isCapturing ? 'Scanning...' : 'Capture Attendance'}
-              </button>
-            </div>
-          </div>
-        </GlassCard>
+      {/* Navigation Tabs */}
+      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-xl)', borderBottom: '1px solid var(--glass-border)', paddingBottom: 'var(--space-sm)' }}>
+        {['attendance', 'timetable', 'assignments'].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              padding: '8px 16px',
+              background: activeTab === tab ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === tab ? '#000' : 'var(--text-secondary)',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: activeTab === tab ? 700 : 500,
+              border: 'none',
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
 
-        {/* Student History */}
-        <GlassCard padding="lg" hover={false}>
-          <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-xl)' }}>
-            Semester Overview
-          </h3>
-          
-          <div style={{ display: 'flex', gap: 'var(--space-3xl)', justifyContent: 'center', marginBottom: 'var(--space-2xl)' }}>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-success)', lineHeight: 1 }}>{attended}</p>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Attended</p>
+      {activeTab === 'attendance' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)', animation: 'fadeIn 0.3s ease-out' }}>
+          <GlassCard padding="lg" hover={false}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h3 style={{ fontSize: 'var(--text-md)', fontWeight: 700, marginBottom: '4px' }}>Capture Live Attendance</h3>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Scan for faculty Bluetooth beacon to log your presence.</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+                {captureStatus && <span style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 600 }}>{captureStatus}</span>}
+                <button
+                  onClick={captureAttendance}
+                  disabled={isCapturing}
+                  style={{
+                    padding: '10px 24px',
+                    background: isCapturing ? 'transparent' : 'var(--accent-primary)',
+                    border: isCapturing ? '1px solid var(--accent-primary)' : 'none',
+                    color: '#000',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: 700,
+                    cursor: isCapturing ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {isCapturing ? 'Scanning...' : 'Capture Attendance'}
+                </button>
+              </div>
+            </div>
+          </GlassCard>
+
+          <GlassCard padding="lg" hover={false}>
+            <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-xl)' }}>
+              Semester Overview
+            </h3>
+            
+            <div style={{ display: 'flex', gap: 'var(--space-3xl)', justifyContent: 'center', marginBottom: 'var(--space-2xl)' }}>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-success)', lineHeight: 1 }}>{attended}</p>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Attended</p>
+              </div>
+              
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-danger)', lineHeight: 1 }}>{missed}</p>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Missed</p>
+              </div>
             </div>
             
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-danger)', lineHeight: 1 }}>{missed}</p>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Missed</p>
+            <div style={{
+              background: 'rgba(0,0,0,0.2)',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--glass-border)',
+              padding: 'var(--space-md)',
+              textAlign: 'center'
+            }}>
+              <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>
+                Overall Attendance Rate: <strong style={{ color: 'var(--color-success)', fontSize: '18px' }}>{attendanceRate}%</strong>
+              </p>
             </div>
-          </div>
-          
-          <div style={{
-            background: 'rgba(0,0,0,0.2)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--glass-border)',
-            padding: 'var(--space-md)',
-            textAlign: 'center'
-          }}>
-            <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>
-              Overall Attendance Rate: <strong style={{ color: 'var(--color-success)', fontSize: '18px' }}>{attendanceRate}%</strong>
-            </p>
-          </div>
-        </GlassCard>
+          </GlassCard>
+        </div>
+      )}
 
-        {/* Alerts */}
-        <GlassCard padding="lg" hover={false} glow="danger">
-          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-md)' }}>
-            Threshold Alerts
-          </h3>
-          {alerts.length > 0 ? (
-            <div style={{ padding: 'var(--space-md)', background: 'rgba(255, 60, 60, 0.1)', borderRadius: 'var(--radius-md)' }}>
-              {/* Dynamic alerts will map here */}
+      {activeTab === 'timetable' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', animation: 'fadeIn 0.3s ease-out' }}>
+          <GlassCard padding="lg" hover={false}>
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>Today's Schedule</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              {[
+                { time: '09:00 AM - 10:30 AM', subject: 'Data Structures (CS301)', type: 'Lecture', room: 'LH-1' },
+                { time: '11:00 AM - 01:00 PM', subject: 'OS Lab (CS302L)', type: 'Lab', room: 'Lab 4' },
+                { time: '02:00 PM - 03:00 PM', subject: 'Machine Learning (CS401)', type: 'Lecture', room: 'LH-3' },
+              ].map((cls, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-md)' }}>
+                  <div style={{ width: '150px', borderRight: '1px solid var(--glass-border)', paddingRight: 'var(--space-md)' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent-primary)' }}>{cls.time}</p>
+                  </div>
+                  <div style={{ paddingLeft: 'var(--space-md)', flex: 1 }}>
+                    <p style={{ fontSize: '14px', fontWeight: 700 }}>{cls.subject}</p>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>{cls.type} • Room: {cls.room}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ) : (
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No active threshold alerts</p>
-          )}
-        </GlassCard>
-      </div>
+          </GlassCard>
+        </div>
+      )}
+
+      {activeTab === 'assignments' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-lg)', animation: 'fadeIn 0.3s ease-out' }}>
+          {/* Pending */}
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-md)' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-danger)', marginBottom: 'var(--space-md)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-danger)' }} /> Pending
+            </h4>
+            <div style={{ background: 'rgba(0,0,0,0.3)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,60,60,0.2)' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600 }}>OS CPU Scheduling Project</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 4 }}>Due: Tomorrow, 11:59 PM</p>
+              <button style={{ marginTop: 'var(--space-md)', width: '100%', padding: '6px', background: 'rgba(255,60,60,0.1)', color: 'var(--color-danger)', border: '1px solid rgba(255,60,60,0.3)', borderRadius: 4, fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>Submit Now</button>
+            </div>
+          </div>
+
+          {/* Submitted */}
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-md)' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-primary)', marginBottom: 'var(--space-md)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} /> Submitted
+            </h4>
+            <div style={{ background: 'rgba(0,0,0,0.3)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(0,255,255,0.2)' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600 }}>ML Regression Assignment</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 4 }}>Submitted: 2 days ago</p>
+              <p style={{ fontSize: '11px', color: 'var(--accent-primary)', marginTop: 8 }}>Awaiting Grade</p>
+            </div>
+          </div>
+
+          {/* Graded */}
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-md)' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-success)', marginBottom: 'var(--space-md)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-success)' }} /> Graded
+            </h4>
+            <div style={{ background: 'rgba(0,0,0,0.3)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16,185,129,0.2)', marginBottom: 'var(--space-sm)' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600 }}>DS Trees & Graphs</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Score:</p>
+                <p style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-success)' }}>9.5 / 10</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

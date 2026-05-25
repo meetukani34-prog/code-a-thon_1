@@ -12,9 +12,11 @@ const navItems = [
   { id: 'add-faculty', label: 'Manage Users', icon: '🛡️', path: '/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
   { id: 'add-admin', label: 'Add Admin', icon: '👑', path: '/superadmin/add-admin', allowedRoles: ['superadmin'] },
   { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/portal/exams' },
+  { id: 'hostel', label: 'Hostel Module', icon: '🏨', path: '/portal/hostel' },
+  { id: 'transport', label: 'Transport Live', icon: '🚌', path: '/portal/transport' },
   { id: 'events', label: 'Events Portal', icon: '★', path: '/portal/events' },
   { id: 'attendance', label: 'Attendance', icon: '◎', path: '/portal/attendance' },
-  { id: 'placements', label: 'Placements', icon: '◈', path: '/portal/placements', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'placements', label: 'Placements', icon: '◈', path: '/portal/placements' },
   { id: 'analytics', label: 'Analytics', icon: '◫', path: '/portal/analytics' },
 ];
 
