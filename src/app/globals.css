@@ -1,9 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 225 25% 6%;
+    --foreground: 0 0% 95%;
+    --card: 225 15% 18%;
+    --card-foreground: 0 0% 95%;
+    --popover: 225 20% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 95%;
+    --secondary: 280 80% 65%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 225 18% 14%;
+    --muted-foreground: 225 10% 45%;
+    --accent: 170 80% 50%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 225 15% 18%;
+    --input: 225 15% 18%;
+    --ring: 210 100% 60%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
 /* ========================================
    CAMPUS OS — Global Design System
    Premium Dark Glassmorphism Theme
    ======================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* =====================
    CSS Custom Properties

@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: '◉', path: '/dashboard' },
+  { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', adminOnly: true },
+  { id: 'admin-campuses', label: 'Campus Nodes', icon: '🌍', path: '/dashboard/admin/campuses', adminOnly: true },
   { id: 'console', label: 'Event Console', icon: '⚡', path: '/dashboard/console' },
   { id: 'attendance', label: 'Attendance', icon: '◎', path: '/dashboard/attendance' },
   { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements' },
@@ -13,7 +15,7 @@ const navItems = [
   { id: 'analytics', label: 'Analytics', icon: '◫', path: '/dashboard/analytics' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ role = 'student' }: { role?: string }) {
   const pathname = usePathname();
 
   return (
@@ -84,6 +86,9 @@ export default function Sidebar() {
         overflowY: 'auto',
       }}>
         {navItems.map((item) => {
+          // RBAC Check
+          if (item.adminOnly && role !== 'admin') return null;
+          
           const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname?.startsWith(item.path));
           return (
             <Link
