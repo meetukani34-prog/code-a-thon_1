@@ -31,59 +31,18 @@ export default function AttendancePage() {
       setTimeout(() => setScanResult('idle'), 5000);
     }, 3000);
   }, []);
+  
+  // State for dynamically loaded alerts
+  const [alerts, setAlerts] = useState<any[]>([]);
 
   useEffect(() => {
-    // Mock initial data until SQL migration for attendance table is run
-    setLogs([
-      { users: { full_name: 'Anjali Desai' }, geo_verified: true, method: 'QR + GeoFencing' },
-      { users: { full_name: 'Rahul Sharma' }, geo_verified: false, method: 'Location Mismatch' }
-    ]);
-
-    // Mock real-time validations streaming in
-    const interval = setInterval(() => {
-      const isVerified = Math.random() > 0.2; // 80% chance of success
-      const methods = ['QR + GeoFencing', 'BLE Beacon', 'Campus WiFi'];
-      const failMethods = ['GPS Spoof Detected', 'IP Mismatch', 'Token Expired'];
-      
-      const newLog = {
-        users: { full_name: `Node ${Math.floor(Math.random() * 9000) + 1000}` },
-        geo_verified: isVerified,
-        method: isVerified ? methods[Math.floor(Math.random() * methods.length)] : failMethods[Math.floor(Math.random() * failMethods.length)]
-      };
-      
-      setLogs(prev => [newLog, ...prev].slice(0, 6));
-    }, 10000);
-      
-    return () => clearInterval(interval);
+    // Fetch actual logs from backend
   }, []);
 
-  // Simulate rolling QR token (4s rotation)
+  // Token simulation removed as per request to remove mock data
   useEffect(() => {
-    const generateToken = () => {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let result = '';
-      for (let i = 0; i < 32; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return `TOK_${result}`;
-    };
-
-    setQrToken(generateToken());
-    setTimeLeft(4);
-
-    const tokenInterval = setInterval(() => {
-      setQrToken(generateToken());
-      setTimeLeft(4);
-    }, 4000);
-
-    const countdownInterval = setInterval(() => {
-      setTimeLeft(prev => Math.max(0, prev - 0.1));
-    }, 100);
-
-    return () => {
-      clearInterval(tokenInterval);
-      clearInterval(countdownInterval);
-    };
+    setQrToken('WAITING_FOR_SESSION_INIT');
+    setTimeLeft(0);
   }, []);
 
   return (
@@ -257,14 +216,13 @@ export default function AttendancePage() {
             <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-md)' }}>
               Threshold Alerts
             </h3>
-            <div style={{ padding: 'var(--space-md)', background: 'rgba(255, 60, 60, 0.1)', borderRadius: 'var(--radius-md)' }}>
-              <p style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: 8 }}>
-                <strong>Rahul Sharma</strong> (CS-204) dropped to 68.5%
-              </p>
-              <p style={{ fontSize: '11px', color: 'var(--color-danger)' }}>
-                Cascading Ripple executed: Placements frozen. Warden notified.
-              </p>
-            </div>
+            {alerts.length > 0 ? (
+              <div style={{ padding: 'var(--space-md)', background: 'rgba(255, 60, 60, 0.1)', borderRadius: 'var(--radius-md)' }}>
+                {/* Dynamic alerts will map here */}
+              </div>
+            ) : (
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No active threshold alerts</p>
+            )}
           </GlassCard>
         </div>
       </div>

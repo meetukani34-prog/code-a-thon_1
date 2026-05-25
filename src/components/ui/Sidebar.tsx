@@ -7,7 +7,8 @@ const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: '◉', path: '/dashboard' },
   { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', adminOnly: true },
   { id: 'admin-campuses', label: 'Campus Nodes', icon: '🌍', path: '/dashboard/admin/campuses', adminOnly: true },
-  { id: 'console', label: 'Event Console', icon: '⚡', path: '/dashboard/console' },
+  { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/dashboard/exams' },
+  { id: 'events', label: 'Events Portal', icon: '★', path: '/dashboard/events' },
   { id: 'attendance', label: 'Attendance', icon: '◎', path: '/dashboard/attendance' },
   { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements' },
   { id: 'timetable', label: 'Timetable', icon: '▦', path: '/dashboard/timetable' },
@@ -137,17 +138,6 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
               )}
               <span style={{ fontSize: '1.1rem', opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
               <span>{item.label}</span>
-              {item.id === 'console' && (
-                <span style={{
-                  marginLeft: 'auto',
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: 'var(--color-danger)',
-                  boxShadow: '0 0 8px var(--color-danger)',
-                  animation: 'pulseGlow 2s ease-in-out infinite',
-                }} />
-              )}
             </Link>
           );
         })}

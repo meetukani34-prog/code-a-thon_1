@@ -21,13 +21,8 @@ export default function PlacementsPage() {
       .then(({ data }) => setApplications(data || []));
   }, []);
 
-  // Simulated upload and processing
   const handleUpload = () => {
-    setUploading(true);
-    setTimeout(() => {
-      setUploading(false);
-      setMatchScore(84.5);
-    }, 2500);
+    // Stub for dynamic upload
   };
 
   return (
@@ -90,25 +85,7 @@ export default function PlacementsPage() {
               border: '1px solid var(--accent-primary)',
               animation: 'slideUp 0.4s ease-out',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>Google - SDE I</span>
-                <span style={{ fontSize: 'var(--text-xl)', fontWeight: 800, color: 'var(--color-success)' }}>{matchScore}%</span>
-              </div>
-              
-              <div style={{ display: 'grid', gap: 8, fontSize: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Required Skills (React, Go)</span>
-                  <span style={{ color: 'var(--color-success)' }}>100% Match</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Project Verification</span>
-                  <span style={{ color: 'var(--color-success)' }}>2 Verified</span>
-                </div>
-              </div>
-
-              <button className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-lg)' }}>
-                Anchor into Interview Slot
-              </button>
+              {/* Dynamic match score will map here */}
             </div>
           )}
         </GlassCard>

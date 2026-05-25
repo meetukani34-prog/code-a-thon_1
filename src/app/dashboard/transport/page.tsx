@@ -13,23 +13,11 @@ interface Vehicle {
 }
 
 export default function TransportPage() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([
-    { id: 'v1', name: 'Bus-03', route: 'Campus → Station', lat: 50, lng: 30, speed: 45 },
-    { id: 'v2', name: 'Bus-11', route: 'Station → Campus', lat: 30, lng: 70, speed: 38 },
-  ]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-  // Simulate Socket.io telemetry update
+  // Simulation removed as per request. Dynamic Socket.io connection goes here.
   useEffect(() => {
-    const interval = setInterval(() => {
-      setVehicles(prev => prev.map(v => ({
-        ...v,
-        lat: Math.max(10, Math.min(90, v.lat + (Math.random() - 0.5) * 5)),
-        lng: Math.max(10, Math.min(90, v.lng + (Math.random() - 0.5) * 5)),
-        speed: Math.max(0, Math.min(60, v.speed + (Math.random() - 0.5) * 10)),
-      })));
-    }, 2000);
-
-    return () => clearInterval(interval);
+    // Connect to actual telemetry socket
   }, []);
 
   return (
@@ -107,20 +95,24 @@ export default function TransportPage() {
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-              {vehicles.map(v => (
-                <div key={v.id} style={{
-                  padding: 'var(--space-sm) var(--space-md)',
-                  background: 'rgba(255,255,255,0.05)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--glass-border)',
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <span style={{ fontSize: '12px', fontWeight: 600 }}>{v.name}</span>
-                    <span style={{ fontSize: '12px', color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>{Math.round(v.speed)} km/h</span>
+              {vehicles.length > 0 ? (
+                vehicles.map(v => (
+                  <div key={v.id} style={{
+                    padding: 'var(--space-sm) var(--space-md)',
+                    background: 'rgba(255,255,255,0.05)',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--glass-border)',
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontSize: '12px', fontWeight: 600 }}>{v.name}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>{Math.round(v.speed)} km/h</span>
+                    </div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{v.route}</div>
                   </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{v.route}</div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center' }}>No active vehicles</p>
+              )}
             </div>
           </GlassCard>
 

@@ -18,6 +18,10 @@ export default function DashboardPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [stats, setStats] = useState({ students: 0, attendance: 0, placements: 0 });
   const [mounted, setMounted] = useState(false);
+  
+  // State for dynamically loaded nodes and telemetry
+  const [nodes, setNodes] = useState<any[]>([]);
+  const [telemetry, setTelemetry] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -161,11 +165,8 @@ export default function DashboardPage() {
             Campus Node Status
           </h3>
 
-          {[
-            { name: 'NIT Surathkal', code: 'NIT-SUR', region: 'South', students: 15800, status: 'online', health: 98 },
-            { name: 'IIT Bombay', code: 'IIT-BOM', region: 'West', students: 18400, status: 'online', health: 95 },
-            { name: 'DTU Delhi', code: 'DTU-DEL', region: 'North', students: 11000, status: 'online', health: 92 },
-          ].map((campus, idx) => (
+          {nodes.length > 0 ? (
+            nodes.map((campus: any, idx: number) => (
             <div
               key={campus.code}
               style={{
@@ -215,7 +216,10 @@ export default function DashboardPage() {
                 }}>Health</p>
               </div>
             </div>
-          ))}
+          ))
+          ) : (
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-md)' }}>No active campus nodes detected</p>
+          )}
         </GlassCard>
       </div>
 
@@ -236,25 +240,23 @@ export default function DashboardPage() {
           gridTemplateColumns: 'repeat(5, 1fr)',
           gap: 'var(--space-md)',
         }}>
-          {[
-            { label: 'Event Bus', value: 'Active', color: 'var(--color-success)', icon: '⚡' },
-            { label: 'CSP Solver', value: 'Idle', color: 'var(--accent-primary)', icon: '▦' },
-            { label: 'Risk Engine', value: 'Processing', color: 'var(--color-warning)', icon: '◈' },
-            { label: 'Encryption', value: 'AES-256', color: 'var(--accent-tertiary)', icon: '🔒' },
-            { label: 'RBAC', value: '6 Roles', color: 'var(--accent-secondary)', icon: '🛡️' },
-          ].map(sys => (
-            <div key={sys.label} style={{
-              textAlign: 'center',
-              padding: 'var(--space-md)',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(0,0,0,0.2)',
-              border: '1px solid var(--glass-border)',
-            }}>
-              <p style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>{sys.icon}</p>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 2 }}>{sys.label}</p>
-              <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: sys.color, fontFamily: 'var(--font-mono)' }}>{sys.value}</p>
-            </div>
-          ))}
+          {telemetry.length > 0 ? (
+            telemetry.map((sys: any) => (
+              <div key={sys.label} style={{
+                textAlign: 'center',
+                padding: 'var(--space-md)',
+                borderRadius: 'var(--radius-md)',
+                background: 'rgba(0,0,0,0.2)',
+                border: '1px solid var(--glass-border)',
+              }}>
+                <p style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>{sys.icon}</p>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 2 }}>{sys.label}</p>
+                <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: sys.color, fontFamily: 'var(--font-mono)' }}>{sys.value}</p>
+              </div>
+            ))
+          ) : (
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', gridColumn: '1 / -1' }}>Awaiting telemetry stream...</p>
+          )}
         </div>
       </GlassCard>
     </div>

@@ -8,11 +8,7 @@ export default function TimetablePage() {
   const [clashScore, setClashScore] = useState(0);
 
   const handleRecrystallize = () => {
-    setSolving(true);
-    setTimeout(() => {
-      setSolving(false);
-      setClashScore(0);
-    }, 2000);
+    // Stub for dynamic timetable solving
   };
 
   return (
@@ -110,36 +106,15 @@ export default function TimetablePage() {
                   {hour}:00
                 </div>
                 
-                {/* Simulated slots for Mon-Fri */}
-                {[0, 1, 2, 3, 4].map(day => {
-                  // Deterministic psuedo-randomness to prevent SSR hydration errors
-                  const pseudoRandom1 = (day * 13 + hour * 7) % 100;
-                  const pseudoRandom2 = (day * 17 + hour * 11) % 300;
-                  const pseudoRandom3 = (day * 23 + hour * 19) % 50;
-                  const hasClass = pseudoRandom1 > 60;
-                  
-                  return (
-                    <div key={`${day}-${hour}`} style={{
-                      background: hasClass && !solving ? 'var(--glass-bg)' : 'var(--bg-elevated)',
-                      padding: 8,
-                      transition: 'all 0.3s',
-                      opacity: solving ? 0.3 : 1,
-                    }}>
-                      {hasClass && !solving && (
-                        <div style={{
-                          height: '100%',
-                          background: 'rgba(255,255,255,0.05)',
-                          borderLeft: '2px solid var(--accent-primary)',
-                          padding: 6,
-                          borderRadius: 4,
-                        }}>
-                          <p style={{ fontSize: '11px', fontWeight: 600 }}>CS-{100 + pseudoRandom2}</p>
-                          <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Room {101 + pseudoRandom3}</p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {/* Dynamic slots will map here */}
+                {[0, 1, 2, 3, 4].map(day => (
+                  <div key={`${day}-${hour}`} style={{
+                    background: 'var(--bg-elevated)',
+                    padding: 8,
+                    transition: 'all 0.3s',
+                    opacity: solving ? 0.3 : 1,
+                  }} />
+                ))}
               </Fragment>
             ))}
           </div>
