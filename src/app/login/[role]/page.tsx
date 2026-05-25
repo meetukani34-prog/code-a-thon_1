@@ -2,32 +2,40 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import '../auth.css';
 
 export default function RoleAuthPage() {
     const params = useParams();
-    // Default to student if role is somehow missing
     const roleParam = (params?.role as string) || 'student';
+    const isAdminRole = roleParam === 'admin' || roleParam === 'superadmin';
     
+    // States for standard users
     const [isToggled, setIsToggled] = useState(false);
     const [showSigninPassword, setShowSigninPassword] = useState(false);
     const [showSignupPassword, setShowSignupPassword] = useState(false);
-
-    const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    
     const [usn, setUsn] = useState('');
     const [fullName, setFullName] = useState('');
     const [branch, setBranch] = useState('');
+    
+    // Shared states
+    const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
+    
+    // Admin specific state
+    const [clearanceKey, setClearanceKey] = useState('');
 
-    // Dynamic Title based on role
     const displayTitle = roleParam === 'superadmin' ? 'Super Admin' : 
                          roleParam.charAt(0).toUpperCase() + roleParam.slice(1);
 
-    const handleAuth = async (e: React.FormEvent) => {
+    const handleStandardAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -66,16 +74,129 @@ export default function RoleAuthPage() {
         setLoading(false);
     };
 
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.href = 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-        return () => {
-            document.head.removeChild(link);
-        };
-    }, []);
+    const handleAdminAuth = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
+        if (clearanceKey !== 'root123') {
+            setError('Invalid Security Clearance Key.');
+            setLoading(false);
+            return;
+        }
+
+        const supabase = createClient();
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (signInError) {
+            const { data, error: signUpError } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        role: roleParam,
+                        full_name: `${displayTitle} Account`,
+                    },
+                },
+            });
+
+            if (signUpError) {
+                setError(signUpError.message);
+                setLoading(false);
+                return;
+            }
+        }
+
+        router.push(roleParam === 'superadmin' ? '/dashboard/superadmin/add-admin' : '/dashboard/admin/users');
+        router.refresh();
+    };
+
+    useEffect(() => {
+        if (!isAdminRole) {
+            const link = document.createElement('link');
+            link.href = 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css';
+            link.rel = 'stylesheet';
+            document.head.appendChild(link);
+            return () => {
+                if (document.head.contains(link)) document.head.removeChild(link);
+            };
+        }
+    }, [isAdminRole]);
+
+    // Admin UI
+    if (isAdminRole) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background/95 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+              <div className="absolute inset-0 bg-primary/5 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background"></div>
+              
+              <Card className="w-full max-w-md relative z-10 bg-background/60 backdrop-blur-xl border-destructive/30 shadow-[0_0_40px_rgba(220,38,38,0.15)]">
+                <CardHeader className="text-center pb-2">
+                  <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-destructive/10 flex items-center justify-center border border-destructive/30 shadow-[0_0_20px_rgba(220,38,38,0.3)]">
+                    <span className="text-destructive text-xl">⚠️</span>
+                  </div>
+                  <CardTitle className="text-2xl font-black tracking-widest text-destructive">RESTRICTED AREA</CardTitle>
+                  <CardDescription className="text-muted-foreground mt-2">
+                    {displayTitle} Gateway. Unauthorized access is strictly prohibited.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleAdminAuth} className="space-y-4 mt-4">
+                    <div className="space-y-2">
+                      <Input 
+                        type="email" 
+                        placeholder="Node Identifier (Email)" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="bg-background/50 border-destructive/20 focus-visible:ring-destructive"
+                        required 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Input 
+                        type="password" 
+                        placeholder="Access Key (Password)" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="bg-background/50 border-destructive/20 focus-visible:ring-destructive"
+                        required 
+                      />
+                    </div>
+                    <div className="space-y-2 pt-4 border-t border-destructive/10">
+                      <label className="text-xs font-mono text-destructive/80 uppercase tracking-widest">Security Clearance Key</label>
+                      <Input 
+                        type="password" 
+                        placeholder="Enter Master Override Key (hint: root123)" 
+                        value={clearanceKey}
+                        onChange={(e) => setClearanceKey(e.target.value)}
+                        className="bg-background/50 border-destructive/50 focus-visible:ring-destructive"
+                        required 
+                      />
+                    </div>
+        
+                    {error && (
+                      <div className="p-3 rounded-md bg-destructive/10 border border-destructive/30 text-destructive text-sm text-center font-mono">
+                        {error}
+                      </div>
+                    )}
+        
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-destructive hover:bg-destructive/90 text-white font-bold tracking-widest mt-6"
+                      disabled={loading}
+                    >
+                      {loading ? 'AUTHENTICATING...' : 'INITIALIZE OVERRIDE →'}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          );
+    }
+
+    // Standard UI (Student/Faculty)
     return (
         <div className="auth-body">
             <div className={`auth-wrapper ${isToggled ? 'toggled' : ''}`}>
@@ -84,7 +205,7 @@ export default function RoleAuthPage() {
 
                 <div className="credentials-panel signin">
                     <h2 className="slide-element">{displayTitle} Login</h2>
-                    <form className="slide-element" onSubmit={handleAuth}>
+                    <form className="slide-element" onSubmit={handleStandardAuth}>
                         <div className="field-wrapper">
                             <input type="email" id="signin-email" name="signin-email" placeholder=" " required value={email} onChange={e => setEmail(e.target.value)} />
                             <label htmlFor="signin-email">Email Address</label>
@@ -109,7 +230,7 @@ export default function RoleAuthPage() {
 
                 <div className="credentials-panel signup">
                     <h2 className="slide-element">{displayTitle} Register</h2>
-                    <form className="slide-element" onSubmit={handleAuth}>
+                    <form className="slide-element" onSubmit={handleStandardAuth}>
                         <div className="field-wrapper">
                             <input type="text" id="signup-usn" name="signup-usn" placeholder=" " required value={usn} onChange={e => setUsn(e.target.value)} />
                             <label htmlFor="signup-usn">Employee/Student ID</label>
