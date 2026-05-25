@@ -5,7 +5,7 @@ import GlassCard from './GlassCard';
 
 interface StatCardProps {
   label: string;
-  value: number;
+  value: number | string;
   suffix?: string;
   prefix?: string;
   icon: string;
@@ -24,10 +24,15 @@ export default function StatCard({
   color = 'var(--accent-primary)',
   decimals = 0,
 }: StatCardProps) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState<number | string>(0);
 
   // Animated counter
   useEffect(() => {
+    if (typeof value === 'string') {
+      setDisplayValue(value);
+      return;
+    }
+
     const duration = 1200;
     const steps = 40;
     const increment = value / steps;
@@ -69,7 +74,7 @@ export default function StatCard({
             lineHeight: 1,
             fontFamily: 'var(--font-mono)',
           }}>
-            {prefix}{displayValue.toFixed(decimals)}{suffix}
+            {prefix}{typeof displayValue === 'number' ? displayValue.toFixed(decimals) : displayValue}{suffix}
           </p>
           {trend !== undefined && (
             <p style={{
