@@ -7,7 +7,7 @@ const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: '◉', path: '/dashboard' },
   { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', allowedRoles: ['admin', 'superadmin'] },
   { id: 'admin-campuses', label: 'Campus Nodes', icon: '🌍', path: '/dashboard/admin/campuses', allowedRoles: ['admin', 'superadmin'] },
-  { id: 'add-faculty', label: 'Add Faculty', icon: '👨‍🏫', path: '/dashboard/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'add-faculty', label: 'Add Admin', icon: '🛡️', path: '/dashboard/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
   { id: 'add-admin', label: 'Add Admin', icon: '👑', path: '/dashboard/superadmin/add-admin', allowedRoles: ['superadmin'] },
   { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/dashboard/exams' },
   { id: 'events', label: 'Events Portal', icon: '★', path: '/dashboard/events' },

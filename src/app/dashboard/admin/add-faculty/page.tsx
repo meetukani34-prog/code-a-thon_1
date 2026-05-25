@@ -4,7 +4,7 @@ import { useState } from 'react';
 import GlassCard from '@/components/ui/GlassCard';
 import { createClient } from '@/lib/supabase/client';
 
-export default function AddFacultyPage() {
+export default function AddAdminPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +12,7 @@ export default function AddFacultyPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  const handleAddFaculty = async (e: React.FormEvent) => {
+  const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
@@ -25,7 +25,7 @@ export default function AddFacultyPage() {
         data: {
           full_name: fullName,
           department: department,
-          role: 'faculty',
+          role: 'admin',
         }
       }
     });
@@ -33,7 +33,7 @@ export default function AddFacultyPage() {
     if (error) {
       setMessage({ type: 'error', text: error.message });
     } else {
-      setMessage({ type: 'success', text: 'Faculty member created successfully.' });
+      setMessage({ type: 'success', text: 'Admin account created successfully.' });
       setFullName('');
       setEmail('');
       setPassword('');
@@ -46,15 +46,15 @@ export default function AddFacultyPage() {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ marginBottom: 'var(--space-xl)' }}>
         <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-xs)' }}>
-          Add Faculty
+          Add Admin
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Provision a new faculty account with broadcast privileges.
+          Provision a new admin account with full administrative privileges.
         </p>
       </div>
 
       <GlassCard padding="lg" hover={false} style={{ maxWidth: '600px' }}>
-        <form onSubmit={handleAddFaculty} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+        <form onSubmit={handleAddAdmin} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>Full Name</label>
             <input 
@@ -134,7 +134,7 @@ export default function AddFacultyPage() {
               opacity: loading ? 0.7 : 1
             }}
           >
-            {loading ? 'Creating...' : 'Create Faculty Account'}
+            {loading ? 'Creating...' : 'Create Admin Account'}
           </button>
         </form>
       </GlassCard>
