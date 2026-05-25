@@ -98,8 +98,13 @@ export default function AuthPortalSelection() {
     
                 {/* Footer Section */}
                 <footer style={{ width: '100%', padding: '30px 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', zIndex: 10, color: 'var(--text-muted)', fontSize: '13px' }}>
-                    <div>
-                        &copy; 2026 Campus OS. Engineered for Excellence.
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+                        <span>&copy; 2026 Campus OS. Engineered for Excellence.</span>
+                        <div style={{ display: 'flex', gap: '15px' }}>
+                            <Link href="/privacy-policy" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Privacy Policy</Link>
+                            <Link href="/terms-conditions" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Terms & Conditions</Link>
+                            <Link href="/about-us" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>About Us</Link>
+                        </div>
                     </div>
                     <div style={{ display: 'flex', gap: '20px', fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                         <span>Next.js 14</span>
