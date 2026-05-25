@@ -1,103 +1,136 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import StatCard from '@/components/ui/StatCard';
+import GlassCard from '@/components/ui/GlassCard';
+import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 
-export default function AdminLogin() {
+export default function AdminPage() {
+  const [role, setRole] = useState('');
+  const [userName, setUserName] = useState('');
+  const [mounted, setMounted] = useState(false);
+  const [loadingRole, setLoadingRole] = useState(true);
+  const [userCount, setUserCount] = useState(0);
+  const [adminCount, setAdminCount] = useState(0);
+  const [facultyCount, setFacultyCount] = useState(0);
+  const [studentCount, setStudentCount] = useState(0);
   const router = useRouter();
-  const supabase = createClient();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+  useEffect(() => {
+    setMounted(true);
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        const rawRole = data.session.user.user_metadata?.role || 'student';
+        const roleLower = rawRole.toLowerCase();
+        setRole(roleLower);
+        setUserName(data.session.user.user_metadata?.full_name || data.session.user.email?.split('@')[0] || 'User');
+        
+        if (roleLower !== 'admin' && roleLower !== 'superadmin') {
+          router.push(`/${roleLower === 'superadmin' ? 'superadmin' : roleLower}`);
+        }
+      } else {
+        router.push('/');
+      }
+      setLoadingRole(false);
     });
 
-    if (signInError) {
-      setError(signInError.message);
-      setLoading(false);
-      return;
-    }
+    fetch('/api/admin/users').then(r => r.json()).then(data => {
+      if (data.users) {
+        setUserCount(data.users.length);
+        setAdminCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'admin').length);
+        setFacultyCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'faculty').length);
+        setStudentCount(data.users.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'student' || !u.user_metadata?.role).length);
+      }
+    }).catch(() => {});
+  }, [router]);
 
-    // Verify admin role
-    const role = data.user?.user_metadata?.role;
-    if (role !== 'admin') {
-      setError('Access Denied. This account does not have Admin privileges.');
-      await supabase.auth.signOut();
-      setLoading(false);
-      return;
-    }
-
-    // Success! Redirect to admin dashboard
-    router.push('/dashboard');
-    router.refresh();
-  };
+  if (!mounted || loadingRole || (role !== 'admin' && role !== 'superadmin')) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid var(--glass-border)', borderTopColor: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background/95 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
-      <div className="absolute inset-0 bg-primary/5 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background"></div>
-      
-      <Card className="w-full max-w-md relative z-10 bg-background/60 backdrop-blur-xl border-yellow-500/30 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-yellow-500/10 flex items-center justify-center border border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
-            <span className="text-yellow-500 text-xl">🛡️</span>
+    <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+      <div style={{ marginBottom: 'var(--space-xl)' }}>
+        <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-xs)' }}>
+          Admin Command Center
+        </h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
+          Welcome back, <strong style={{ color: 'var(--color-warning)' }}>{userName}</strong>. College-specific operational overview.
+        </p>
+      </div>
+
+      <div className="grid-stats" style={{ marginBottom: 'var(--space-xl)' }}>
+        <StatCard label="Total Identities" value={userCount} icon="👥" color="var(--accent-primary)" />
+        <StatCard label="Faculty Enrolled" value={facultyCount} icon="👨‍🏫" color="var(--color-warning)" />
+        <StatCard label="Students Enrolled" value={studentCount} icon="🎓" color="var(--color-success)" />
+        <StatCard label="Active Alerts" value={3} icon="🔔" color="var(--color-danger)" />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
+        {/* Quick Actions for Admin */}
+        <GlassCard padding="lg" hover={false}>
+          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
+            Administrative Actions
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+            {[
+              { label: 'Manage Identity', path: '/admin/users', icon: '👥', desc: 'College RBAC configuration' },
+              { label: 'Manage Faculty/Students', path: '/admin/add-faculty', icon: '🛡️', desc: 'Provision users for your college' },
+              { label: 'College Analytics', path: '/portal/analytics', icon: '◫', desc: 'Local telemetry' },
+              { label: 'Local Placements', path: '/portal/placements', icon: '◈', desc: 'College placement monitoring' },
+            ].map(action => (
+              <a key={action.path} href={action.path} style={{
+                display: 'flex', alignItems: 'center', gap: 'var(--space-md)', padding: '12px 16px',
+                background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-md)',
+                textDecoration: 'none', color: 'inherit', transition: 'all 0.3s',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-primary)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.transform = 'translateX(0)'; }}>
+                <span style={{ fontSize: '20px' }}>{action.icon}</span>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 600 }}>{action.label}</p>
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{action.desc}</p>
+                </div>
+              </a>
+            ))}
           </div>
-          <CardTitle className="text-2xl font-black tracking-widest text-yellow-500">ADMIN PORTAL</CardTitle>
-          <CardDescription className="text-muted-foreground mt-2">
-            Administrative access only. Sign in with your admin credentials.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleAdminLogin} className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Input 
-                type="email" 
-                placeholder="Admin Email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-background/50 border-yellow-500/20 focus-visible:ring-yellow-500"
-                required 
-              />
-            </div>
-            <div className="space-y-2">
-              <Input 
-                type="password" 
-                placeholder="Password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-background/50 border-yellow-500/20 focus-visible:ring-yellow-500"
-                required 
-              />
-            </div>
+        </GlassCard>
 
-            {error && (
-              <div className="p-3 rounded-md bg-destructive/10 border border-destructive/30 text-destructive text-sm text-center font-mono">
-                {error}
+        {/* Local System Status */}
+        <GlassCard padding="lg" hover={false}>
+          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-lg)' }}>
+            College System Status
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            {[
+              { label: 'Local Databases', status: 'Operational', color: 'var(--color-success)' },
+              { label: 'Face ID Hardware', status: '2 Offline', color: 'var(--color-warning)' },
+              { label: 'Local Network', status: 'Stable', color: 'var(--color-success)' },
+            ].map(sys => (
+              <div key={sys.label} style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '12px 16px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)',
+                borderRadius: 'var(--radius-md)',
+              }}>
+                <span style={{ fontSize: '14px', fontWeight: 600 }}>{sys.label}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: sys.color, boxShadow: `0 0 8px ${sys.color}` }} />
+                  <span style={{ fontSize: '12px', color: sys.color, fontWeight: 600 }}>{sys.status}</span>
+                </div>
               </div>
-            )}
-
-            <Button 
-              type="submit" 
-              className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold tracking-widest mt-6"
-              disabled={loading}
-            >
-              {loading ? 'AUTHENTICATING...' : 'ADMIN LOGIN →'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            ))}
+          </div>
+        </GlassCard>
+      </div>
     </div>
   );
 }

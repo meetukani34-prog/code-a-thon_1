@@ -5,15 +5,17 @@ import Link from 'next/link';
 
 const navItems = [
   { id: 'superadmin', label: 'Superadmin Center', icon: '◉', path: '/superadmin', allowedRoles: ['superadmin'] },
-  { id: 'dashboard', label: 'Dashboard', icon: '◉', path: '/dashboard', hideRoles: ['superadmin'] },
-  { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/dashboard/admin/users', allowedRoles: ['admin', 'superadmin'] },
-  { id: 'add-faculty', label: 'Manage Users', icon: '🛡️', path: '/dashboard/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'admin', label: 'Admin Center', icon: '◉', path: '/admin', allowedRoles: ['admin'] },
+  { id: 'faculty', label: 'Faculty Center', icon: '◉', path: '/faculty', allowedRoles: ['faculty'] },
+  { id: 'student', label: 'Dashboard', icon: '◉', path: '/student', allowedRoles: ['student'] },
+  { id: 'admin-users', label: 'Identity (RBAC)', icon: '👥', path: '/admin/users', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'add-faculty', label: 'Manage Users', icon: '🛡️', path: '/admin/add-faculty', allowedRoles: ['admin', 'superadmin'] },
   { id: 'add-admin', label: 'Add Admin', icon: '👑', path: '/superadmin/add-admin', allowedRoles: ['superadmin'] },
-  { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/dashboard/exams' },
-  { id: 'events', label: 'Events Portal', icon: '★', path: '/dashboard/events' },
-  { id: 'attendance', label: 'Attendance', icon: '◎', path: '/dashboard/attendance' },
-  { id: 'placements', label: 'Placements', icon: '◈', path: '/dashboard/placements', allowedRoles: ['admin', 'superadmin'] },
-  { id: 'analytics', label: 'Analytics', icon: '◫', path: '/dashboard/analytics' },
+  { id: 'exams', label: 'Exam Portal', icon: '✎', path: '/portal/exams' },
+  { id: 'events', label: 'Events Portal', icon: '★', path: '/portal/events' },
+  { id: 'attendance', label: 'Attendance', icon: '◎', path: '/portal/attendance' },
+  { id: 'placements', label: 'Placements', icon: '◈', path: '/portal/placements', allowedRoles: ['admin', 'superadmin'] },
+  { id: 'analytics', label: 'Analytics', icon: '◫', path: '/portal/analytics' },
 ];
 
 export default function Sidebar({ role = 'student' }: { role?: string }) {

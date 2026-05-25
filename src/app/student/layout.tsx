@@ -3,7 +3,7 @@ import TopBar from '@/components/ui/TopBar';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
-export default async function DashboardLayout({
+export default async function StudentLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export default async function DashboardLayout({
         marginLeft: 'var(--sidebar-width)',
         paddingTop: 'var(--topbar-height)',
       }}>
-        <TopBar role={role} />
+        <TopBar role={role} title="Student Dashboard" />
         <main style={{
           padding: 'var(--space-xl)',
           position: 'relative',

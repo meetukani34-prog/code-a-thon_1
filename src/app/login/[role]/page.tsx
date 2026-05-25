@@ -44,9 +44,14 @@ export default function RoleAuthPage() {
         const supabase = createClient();
 
         if (!isToggled) {
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) setError(error.message);
-            else router.push('/dashboard');
+            const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                setError(error.message);
+                setLoading(false);
+            } else {
+                const userRole = data.user?.user_metadata?.role?.toLowerCase() || 'student';
+                router.push(`/${userRole}`);
+            }
         } else {
             const { error, data } = await supabase.auth.signUp({ 
                 email, 
@@ -64,7 +69,8 @@ export default function RoleAuthPage() {
                 setError(error.message);
             } else {
                 if (data.session) {
-                    router.push('/dashboard');
+                    const userRole = data.user?.user_metadata?.role?.toLowerCase() || 'student';
+                    router.push(`/${userRole}`);
                 } else {
                     setMessage('Registration successful! Check your email to confirm if required.');
                     setIsToggled(false);
@@ -110,7 +116,7 @@ export default function RoleAuthPage() {
             }
         }
 
-        router.push(roleParam === 'superadmin' ? '/dashboard/superadmin/add-admin' : '/dashboard/admin/users');
+        router.push(roleParam === 'superadmin' ? '/superadmin/add-admin' : '/admin/users');
         router.refresh();
     };
 

@@ -83,9 +83,9 @@ export default function SuperadminPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
             {[
               { label: 'Provision Admin', path: '/superadmin/add-admin', icon: '👑', desc: 'Create new administrator accounts' },
-              { label: 'Manage Identity', path: '/dashboard/admin/users', icon: '👥', desc: 'Global RBAC configuration' },
-              { label: 'Manage Placements', path: '/dashboard/placements', icon: '◈', desc: 'Global placement monitoring' },
-              { label: 'System Analytics', path: '/dashboard/analytics', icon: '◫', desc: 'Platform-wide telemetry' },
+              { label: 'Manage Identity', path: '/admin/users', icon: '👥', desc: 'Global RBAC configuration' },
+              { label: 'Manage Placements', path: '/portal/placements', icon: '◈', desc: 'Global placement monitoring' },
+              { label: 'System Analytics', path: '/portal/analytics', icon: '◫', desc: 'Platform-wide telemetry' },
             ].map(action => (
               <a key={action.path} href={action.path} style={{
                 display: 'flex', alignItems: 'center', gap: 'var(--space-md)', padding: '12px 16px',
