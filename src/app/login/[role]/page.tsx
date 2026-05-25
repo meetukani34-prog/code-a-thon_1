@@ -154,7 +154,7 @@ export default function RoleAuthPage() {
     // Admin UI
     if (isAdminRole) {
         return (
-            <GridGlowBackground backgroundColor="#050505" glowColors={["#ff003c", "#990000", "#ff003c"]}>
+            <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
               <style>{`
                 .glowing-outer {
                   width: 100%;
@@ -164,13 +164,13 @@ export default function RoleAuthPage() {
                   padding: 1px;
                   overflow: hidden;
                   background: rgba(255, 255, 255, 0.03);
-                  box-shadow: 0 0 40px rgba(255, 0, 60, 0.15);
+                  box-shadow: 0 0 40px rgba(0, 212, 255, 0.15);
                 }
                 .glowing-dot {
                   position: absolute;
                   width: 100px;
                   height: 100px;
-                  background: radial-gradient(circle, rgba(255, 0, 60, 0.8) 0%, rgba(153, 0, 0, 0.5) 40%, transparent 70%);
+                  background: radial-gradient(circle, rgba(0, 212, 255, 0.8) 0%, rgba(157, 0, 255, 0.5) 40%, transparent 70%);
                   filter: blur(8px);
                   animation: moveDot 6s linear infinite;
                   z-index: 0;
@@ -185,7 +185,7 @@ export default function RoleAuthPage() {
                 }
                 .glowing-card {
                   position: relative;
-                  background: rgba(10, 5, 5, 0.95);
+                  background: rgba(10, 5, 10, 0.95);
                   backdrop-filter: blur(20px);
                   -webkit-backdrop-filter: blur(20px);
                   border-radius: 15px;
@@ -199,37 +199,32 @@ export default function RoleAuthPage() {
                   transition: all 0.3s ease !important;
                 }
                 .clean-input:focus {
-                  background: rgba(255, 255, 255, 0.06) !important;
-                  border-color: rgba(255, 0, 60, 0.5) !important;
-                  box-shadow: 0 0 15px rgba(255, 0, 60, 0.15) !important;
-                  outline: none !important;
+                  border-color: #00d4ff !important;
+                  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2) !important;
                 }
-                .clean-input::placeholder {
-                  color: rgba(255, 255, 255, 0.4) !important;
+                .admin-btn {
+                  background: linear-gradient(135deg, #00d4ff, #9d00ff);
+                  color: white;
+                  font-weight: 700;
+                  letter-spacing: 1px;
+                  border: none;
+                  transition: all 0.3s ease;
                 }
-                .gradient-btn {
-                  background: linear-gradient(90deg, #ff003c, #990000) !important;
-                  border: none !important;
-                  color: white !important;
-                  font-weight: 600 !important;
-                  transition: all 0.3s ease !important;
-                }
-                .gradient-btn:hover {
-                  box-shadow: 0 0 20px rgba(255, 0, 60, 0.4) !important;
-                  transform: translateY(-2px) !important;
-                  filter: brightness(1.1);
+                .admin-btn:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
                 }
               `}</style>
 
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,0,60,0.05)_0%,_rgba(0,0,0,0)_70%)] pointer-events-none"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,212,255,0.05)_0%,_rgba(0,0,0,0)_70%)] pointer-events-none"></div>
               
               <div className="glowing-outer z-10">
                 <div className="glowing-dot"></div>
                 <div className="glowing-card">
                   
                   <div className="text-center mb-8 relative z-20">
-                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-red-500/20 to-red-900/20 flex items-center justify-center border border-red-500/30">
-                      <span className="text-red-500 text-xl">⚠️</span>
+                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center border border-cyan-500/30">
+                      <span className="text-cyan-400 text-xl">🛡️</span>
                     </div>
                     <h2 className="text-2xl font-bold text-white tracking-wide">
                       ADMIN GATEWAY
@@ -283,7 +278,7 @@ export default function RoleAuthPage() {
         
                     <Button 
                       type="submit" 
-                      className="gradient-btn w-full h-12 rounded-xl mt-6 tracking-wide"
+                      className="admin-btn w-full h-12 rounded-xl mt-6 tracking-wide"
                       disabled={loading}
                     >
                       {loading ? 'AUTHENTICATING...' : 'INITIALIZE OVERRIDE →'}
