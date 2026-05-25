@@ -143,7 +143,7 @@ export default function PlacementsPage() {
         // STUDENT VIEW
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)' }}>
           {isFrozen ? (
-            <GlassCard padding="2xl" hover={false} glow="danger" style={{ textAlign: 'center' }}>
+            <GlassCard padding="lg" hover={false} glow="danger" style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '4rem', marginBottom: 'var(--space-md)' }}>🛑</div>
               <h2 style={{ fontSize: '2rem', color: 'var(--color-danger)', fontWeight: 900, marginBottom: 'var(--space-sm)' }}>
                 PLACEMENTS FROZEN
