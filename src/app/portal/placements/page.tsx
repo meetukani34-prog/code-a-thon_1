@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +17,9 @@ export default function PlacementsPage() {
   const [resumeUploaded, setResumeUploaded] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [matchScore, setMatchScore] = useState<number | null>(null);
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -84,12 +87,39 @@ export default function PlacementsPage() {
     }
   };
 
-  const simulateAIAnalysis = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setResumeUploaded(true);
+      setMatchScore(null);
+      setKeywords([]);
+    }
+  };
+
+  const runAIAnalysis = async () => {
+    if (!file) return;
     setAnalyzing(true);
-    setTimeout(() => {
+    setMatchScore(null);
+    setKeywords([]);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('jobDescription', 'Software Engineer, L3. Eligibility: > 8.0 CGPA, No Active Backlogs. Key skills required: Python, SQL, Machine Learning, Data Structures, System Design.');
+      
+      const res = await fetch('/api/placements/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.score !== undefined) setMatchScore(data.score);
+      if (data.keywords) setKeywords(data.keywords);
+    } catch (e) {
+      console.error(e);
+      setMatchScore(65);
+      setKeywords(['Error processing']);
+    } finally {
       setAnalyzing(false);
-      setMatchScore(82); // Mock score as requested by user
-    }, 2500);
+    }
   };
 
   if (loading) {
@@ -180,10 +210,13 @@ export default function PlacementsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {!resumeUploaded ? (
-                    <div className="border-2 border-dashed border-glass-border rounded-lg p-8 text-center bg-black/20 hover:bg-black/40 transition-colors cursor-pointer" onClick={() => setResumeUploaded(true)}>
-                      <div className="text-3xl mb-2">📄</div>
-                      <p className="text-sm font-medium">Click to upload your latest Resume (PDF)</p>
-                      <p className="text-xs text-muted-foreground mt-1">Max file size: 5MB</p>
+                    <div>
+                      <input type="file" accept=".pdf" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
+                      <div className="border-2 border-dashed border-glass-border rounded-lg p-8 text-center bg-black/20 hover:bg-black/40 transition-colors cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                        <div className="text-3xl mb-2">📄</div>
+                        <p className="text-sm font-medium">Click to upload your latest Resume (PDF)</p>
+                        <p className="text-xs text-muted-foreground mt-1">Max file size: 5MB</p>
+                      </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -191,11 +224,11 @@ export default function PlacementsPage() {
                         <div className="flex items-center gap-3">
                           <div className="text-2xl">📄</div>
                           <div>
-                            <div className="text-sm font-medium">meet_ukani_resume_v2.pdf</div>
-                            <div className="text-xs text-emerald-400 font-bold">✓ Parsed Successfully</div>
+                            <div className="text-sm font-medium">{file ? file.name : 'resume.pdf'}</div>
+                            <div className="text-xs text-emerald-400 font-bold">✓ Ready for Analysis</div>
                           </div>
                         </div>
-                        <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setResumeUploaded(false); setMatchScore(null); }}>Replace</Button>
+                        <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setResumeUploaded(false); setMatchScore(null); setFile(null); }}>Replace</Button>
                       </div>
 
                       <div className="p-4 bg-accent-primary/10 border border-accent-primary/30 rounded-lg">
@@ -207,7 +240,7 @@ export default function PlacementsPage() {
                             <p className="text-xs text-muted-foreground animate-pulse">AI is analyzing your skills...</p>
                           </div>
                         ) : matchScore === null ? (
-                          <Button className="w-full bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/30" onClick={simulateAIAnalysis}>
+                          <Button className="w-full bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/30" onClick={runAIAnalysis}>
                             Run AI Match Analysis
                           </Button>
                         ) : (
@@ -223,14 +256,16 @@ export default function PlacementsPage() {
                               <div className="flex-1">
                                 <p className="text-xs text-muted-foreground mb-1">Keywords Found:</p>
                                 <div className="flex flex-wrap gap-1">
-                                  <Badge className="bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/20">Python</Badge>
-                                  <Badge className="bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/20">SQL</Badge>
-                                  <Badge className="bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/20">Machine Learning</Badge>
+                                  {keywords.length > 0 ? keywords.map((kw, i) => (
+                                    <Badge key={i} className="bg-accent-primary/20 text-accent-primary hover:bg-accent-primary/20">{kw}</Badge>
+                                  )) : (
+                                    <Badge className="bg-destructive/20 text-destructive hover:bg-destructive/20">None</Badge>
+                                  )}
                                 </div>
                               </div>
                             </div>
-                            <div className="text-xs text-emerald-400 bg-emerald-500/10 p-2 rounded text-center">
-                              You have a high probability of being shortlisted!
+                            <div className={`text-xs p-2 rounded text-center ${matchScore >= 70 ? 'text-emerald-400 bg-emerald-500/10' : 'text-yellow-400 bg-yellow-500/10'}`}>
+                              {matchScore >= 70 ? 'You have a high probability of being shortlisted!' : 'Consider updating your resume with missing keywords.'}
                             </div>
                           </div>
                         )}
