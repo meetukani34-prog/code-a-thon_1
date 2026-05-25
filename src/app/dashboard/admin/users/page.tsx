@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 export default function DigitalIdentityApprovalPage() {
   const [users, setUsers] = useState<any[]>([]);
+  const [currentUserRole, setCurrentUserRole] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
@@ -25,6 +26,7 @@ export default function DigitalIdentityApprovalPage() {
     const data = await res.json();
     if (data.users) {
       setUsers(data.users);
+      setCurrentUserRole(data.currentUserRole);
     }
     setLoading(false);
   }
@@ -93,8 +95,12 @@ export default function DigitalIdentityApprovalPage() {
                           <SelectItem value="pending">Pending</SelectItem>
                           <SelectItem value="student">Student</SelectItem>
                           <SelectItem value="faculty">Faculty</SelectItem>
-                          <SelectItem value="warden">Warden</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
+                          {currentUserRole === 'superadmin' && (
+                            <>
+                              <SelectItem value="warden">Warden</SelectItem>
+                              <SelectItem value="admin">Admin</SelectItem>
+                            </>
+                          )}
                         </SelectContent>
                       </Select>
                     </TableCell>
