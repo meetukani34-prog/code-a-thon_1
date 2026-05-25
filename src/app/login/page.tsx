@@ -1,11 +1,18 @@
 'use client';
 import Link from 'next/link';
 import './auth.css';
-import GridGlowBackground from '@/components/ui/grid-glow-background';
+import NeuralBackground from '@/components/ui/flow-field-background';
 
 export default function AuthPortalSelection() {
     return (
-        <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
+        <div className="relative min-h-screen w-full overflow-hidden bg-black">
+            <NeuralBackground 
+                color="#00d4ff" 
+                trailOpacity={0.15} 
+                particleCount={800} 
+                speed={0.8} 
+                className="absolute inset-0 z-0" 
+            />
             <div className="auth-body relative z-20" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>
                 <div className="background-shape"></div>
                 <div className="secondary-shape"></div>
@@ -113,6 +120,6 @@ export default function AuthPortalSelection() {
                     </div>
                 </footer>
             </div>
-        </GridGlowBackground>
+        </div>
     );
 }

@@ -22,6 +22,10 @@ interface NeuralBackgroundProps {
    * Speed multiplier. Default: 1
    */
   speed?: number;
+  /**
+   * Scale is listed in demo but not in props, adding for safety
+   */
+  scale?: number;
 }
 
 export default function NeuralBackground({
@@ -30,6 +34,7 @@ export default function NeuralBackground({
   trailOpacity = 0.15,
   particleCount = 600,
   speed = 1,
+  scale = 1,
 }: NeuralBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -195,7 +200,7 @@ export default function NeuralBackground({
   }, [color, trailOpacity, particleCount, speed]);
 
   return (
-    <div ref={containerRef} className={cn("absolute inset-0 w-full h-full bg-black overflow-hidden z-[-1]", className)}>
+    <div ref={containerRef} className={cn("relative w-full h-full bg-black overflow-hidden", className)}>
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   );
