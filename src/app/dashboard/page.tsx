@@ -65,16 +65,15 @@ export default function DashboardPage() {
 
       {/* Stat Cards */}
       <div className="grid-stats" style={{ marginBottom: 'var(--space-xl)' }}>
-        <StatCard label="Active Students" value={stats.students} icon="◉" color="var(--accent-primary)" />
-        <StatCard label="Avg Attendance" value={stats.attendance} suffix="%" icon="◎" color="var(--color-success)" decimals={1} />
+        <StatCard label="Student Attendance" value={stats.attendance} suffix="%" icon="◎" color="var(--color-success)" decimals={1} />
         <StatCard label="Placement Rate" value={stats.placements} suffix="%" icon="◈" color="var(--accent-secondary)" decimals={1} />
         <StatCard label="Active Alerts" value={events.filter(e => e.severity === 'critical' || e.severity === 'warning').length} icon="⚡" color="var(--color-danger)" />
       </div>
 
-      {/* Two Column Layout */}
+      {/* Layout */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1fr',
         gap: 'var(--space-lg)',
       }}>
         {/* Event Feed */}
@@ -153,74 +152,7 @@ export default function DashboardPage() {
           </div>
         </GlassCard>
 
-        {/* Campus Nodes */}
-        <GlassCard padding="lg" hover={false}>
-          <h3 style={{
-            fontSize: 'var(--text-sm)',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-            marginBottom: 'var(--space-lg)',
-          }}>
-            Campus Node Status
-          </h3>
 
-          {nodes.length > 0 ? (
-            nodes.map((campus: any, idx: number) => (
-            <div
-              key={campus.code}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 'var(--space-md)',
-                borderRadius: 'var(--radius-md)',
-                background: 'rgba(0,0,0,0.2)',
-                border: '1px solid var(--glass-border)',
-                marginBottom: 'var(--space-sm)',
-                animation: `slideInLeft 0.3s ease-out ${idx * 0.1}s both`,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-                <div style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: 'var(--color-success)',
-                  boxShadow: '0 0 8px var(--color-success)',
-                }} />
-                <div>
-                  <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{campus.name}</p>
-                  <p style={{
-                    fontSize: 'var(--text-xs)',
-                    color: 'var(--text-muted)',
-                    fontFamily: 'var(--font-mono)',
-                  }}>
-                    {campus.code} • {campus.region} • {campus.students.toLocaleString()} students
-                  </p>
-                </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <p style={{
-                  fontSize: 'var(--text-sm)',
-                  fontWeight: 700,
-                  color: 'var(--color-success)',
-                  fontFamily: 'var(--font-mono)',
-                }}>
-                  {campus.health}%
-                </p>
-                <p style={{
-                  fontSize: '10px',
-                  color: 'var(--text-muted)',
-                  textTransform: 'uppercase',
-                }}>Health</p>
-              </div>
-            </div>
-          ))
-          ) : (
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-md)' }}>No active campus nodes detected</p>
-          )}
-        </GlassCard>
       </div>
 
       {/* System Architecture Overview */}
