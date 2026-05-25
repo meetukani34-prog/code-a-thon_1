@@ -29,9 +29,8 @@ export default function SuperadminPage() {
         const roleLower = rawRole.toLowerCase();
         setRole(roleLower);
         setUserName(data.session.user.user_metadata?.full_name || data.session.user.email?.split('@')[0] || 'User');
-        
         if (roleLower !== 'superadmin') {
-          router.push('/dashboard');
+          router.push(`/${roleLower}`);
         }
       } else {
         router.push('/');

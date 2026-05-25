@@ -18,6 +18,10 @@ export default async function DashboardLayout({
   const rawRole = session.user.user_metadata?.role || 'student';
   const role = rawRole.toLowerCase();
 
+  if (role !== 'superadmin') {
+    redirect(`/${role}`);
+  }
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar role={role} />

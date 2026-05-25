@@ -92,7 +92,7 @@ export default function RoleAuthPage() {
         }
 
         const supabase = createClient();
-        const { error: signInError } = await supabase.auth.signInWithPassword({
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
@@ -114,9 +114,18 @@ export default function RoleAuthPage() {
                 setLoading(false);
                 return;
             }
+        } else {
+            // Check if existing user actually has the required role
+            const userRole = signInData?.user?.user_metadata?.role?.toLowerCase();
+            if (userRole !== 'admin' && userRole !== 'superadmin') {
+                setError(`Unauthorized. This account is registered as ${userRole || 'student'}.`);
+                await supabase.auth.signOut();
+                setLoading(false);
+                return;
+            }
         }
 
-        router.push(roleParam === 'superadmin' ? '/superadmin/add-admin' : '/admin/users');
+        router.push(roleParam === 'superadmin' ? '/superadmin' : '/admin');
         router.refresh();
     };
 
