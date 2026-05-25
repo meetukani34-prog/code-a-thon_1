@@ -8,7 +8,6 @@ export default function AddAdminPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [department, setDepartment] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -24,7 +23,6 @@ export default function AddAdminPage() {
       options: {
         data: {
           full_name: fullName,
-          department: department,
           role: 'admin',
         }
       }
@@ -37,7 +35,6 @@ export default function AddAdminPage() {
       setFullName('');
       setEmail('');
       setPassword('');
-      setDepartment('');
     }
     setLoading(false);
   };
@@ -81,19 +78,7 @@ export default function AddAdminPage() {
               }}
             />
           </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>Department</label>
-            <input 
-              type="text" 
-              required 
-              value={department}
-              onChange={e => setDepartment(e.target.value)}
-              style={{
-                width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)',
-                borderRadius: 'var(--radius-md)', color: 'white', outline: 'none'
-              }}
-            />
-          </div>
+
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>Temporary Password</label>
             <input 
