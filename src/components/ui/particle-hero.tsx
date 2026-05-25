@@ -19,7 +19,7 @@ export function ParticleHero({ children }: { children?: React.ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isGoldMode, setIsGoldMode] = useState(false)
   const particlesRef = useRef<Particle[]>([])
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number>(0)
 
   const createParticle = (canvas: HTMLCanvasElement): Particle => {
     const particle = {
