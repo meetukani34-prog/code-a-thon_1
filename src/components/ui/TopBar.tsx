@@ -115,40 +115,67 @@ export default function TopBar({ title = 'Dashboard', role = 'student' }: TopBar
           </span>
         </button>
 
-        {/* User Avatar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-sm)',
-          padding: '4px 12px 4px 4px',
-          borderRadius: 'var(--radius-full)',
-          background: 'var(--glass-bg)',
-          border: '1px solid var(--glass-border)',
-          cursor: 'pointer',
-          transition: 'all var(--transition-normal)',
-        }}>
+        {/* User Avatar & Logout */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
           <div style={{
-            width: 28,
-            height: 28,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
+            gap: 'var(--space-sm)',
+            padding: '4px 12px 4px 4px',
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--glass-bg)',
+            border: '1px solid var(--glass-border)',
+            cursor: 'pointer',
+            transition: 'all var(--transition-normal)',
           }}>
-            {role.charAt(0)}
+            <div style={{
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+            }}>
+              {role.charAt(0)}
+            </div>
+            <span style={{
+              fontSize: 'var(--text-xs)',
+              color: 'var(--text-secondary)',
+              fontWeight: 500,
+              textTransform: 'capitalize',
+            }}>
+              {role}
+            </span>
           </div>
-          <span style={{
-            fontSize: 'var(--text-xs)',
-            color: 'var(--text-secondary)',
-            fontWeight: 500,
-            textTransform: 'capitalize',
-          }}>
-            {role}
-          </span>
+
+          <button
+            onClick={async () => {
+              const { createClient } = await import('@/lib/supabase/client');
+              const supabase = createClient();
+              await supabase.auth.signOut();
+              window.location.href = '/login';
+            }}
+            style={{
+              padding: '6px 12px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-danger)',
+              color: 'white',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 600,
+              border: 'none',
+              cursor: 'pointer',
+              opacity: 0.8,
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </header>

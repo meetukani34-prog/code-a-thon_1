@@ -50,6 +50,12 @@ export default function RoleAuthPage() {
                 setLoading(false);
             } else {
                 const userRole = data.user?.user_metadata?.role?.toLowerCase() || 'student';
+                if (roleParam !== 'student' && userRole !== roleParam) {
+                    setError(`Unauthorized. This account is registered as ${userRole}.`);
+                    await supabase.auth.signOut();
+                    setLoading(false);
+                    return;
+                }
                 router.push(`/${userRole}`);
             }
         } else {
