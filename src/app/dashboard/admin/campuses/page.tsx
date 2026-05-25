@@ -16,6 +16,13 @@ export default function CampusManagementPage() {
   const [newCampus, setNewCampus] = useState('');
   const [newLocation, setNewLocation] = useState('');
 
+  const [isEditingConfig, setIsEditingConfig] = useState(false);
+  const [config, setConfig] = useState({
+    gradingScale: '10.0 CGPA',
+    passCriteria: '> 40%',
+    creditTransfer: 'Enabled (Cross-Campus)'
+  });
+
   const handleOnboard = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCampus) return;
@@ -72,22 +79,39 @@ export default function CampusManagementPage() {
 
         {/* Global Configuration */}
         <Card className="bg-background/50 backdrop-blur-xl border-glass-border md:col-span-2">
-          <CardHeader>
-            <CardTitle>Global University Configuration</CardTitle>
-            <CardDescription>Base parameters inherited by all campus nodes.</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div className="space-y-1">
+              <CardTitle>Global University Configuration</CardTitle>
+              <CardDescription>Base parameters inherited by all campus nodes.</CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setIsEditingConfig(!isEditingConfig)}>
+              {isEditingConfig ? 'Save Changes' : 'Edit Config'}
+            </Button>
           </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-2 gap-4 pt-4">
             <div className="p-4 rounded-lg border border-glass-border bg-background/30 flex flex-col items-center justify-center text-center">
-              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Grading Scale</span>
-              <span className="text-2xl font-bold text-primary">10.0 CGPA</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Grading Scale</span>
+              {isEditingConfig ? (
+                <Input value={config.gradingScale} onChange={e => setConfig({...config, gradingScale: e.target.value})} className="text-center h-8" />
+              ) : (
+                <span className="text-2xl font-bold text-primary">{config.gradingScale}</span>
+              )}
             </div>
             <div className="p-4 rounded-lg border border-glass-border bg-background/30 flex flex-col items-center justify-center text-center">
-              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Pass Criteria</span>
-              <span className="text-2xl font-bold text-primary">&gt; 40%</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Pass Criteria</span>
+              {isEditingConfig ? (
+                <Input value={config.passCriteria} onChange={e => setConfig({...config, passCriteria: e.target.value})} className="text-center h-8" />
+              ) : (
+                <span className="text-2xl font-bold text-primary">{config.passCriteria}</span>
+              )}
             </div>
             <div className="p-4 rounded-lg border border-glass-border bg-background/30 flex flex-col items-center justify-center text-center col-span-2">
-              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Global Credit Transfer</span>
-              <span className="text-sm font-medium text-success">Enabled (Cross-Campus)</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Global Credit Transfer</span>
+              {isEditingConfig ? (
+                <Input value={config.creditTransfer} onChange={e => setConfig({...config, creditTransfer: e.target.value})} className="text-center h-8" />
+              ) : (
+                <span className="text-sm font-medium text-success">{config.creditTransfer}</span>
+              )}
             </div>
           </CardContent>
         </Card>
