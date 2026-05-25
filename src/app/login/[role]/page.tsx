@@ -153,145 +153,143 @@ export default function RoleAuthPage() {
     // Admin UI
     if (isAdminRole) {
         return (
-            <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#050505]">
+            <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#09090b]">
               <style>{`
-                .admin-grid {
+                .glowing-outer {
+                  width: 100%;
+                  max-width: 420px;
+                  position: relative;
+                  border-radius: 16px;
+                  padding: 1px;
+                  overflow: hidden;
+                  background: rgba(255, 255, 255, 0.03);
+                  box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+                }
+                .glowing-dot {
                   position: absolute;
-                  inset: 0;
-                  background-image: 
-                    linear-gradient(to right, rgba(220, 38, 38, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(220, 38, 38, 0.05) 1px, transparent 1px);
-                  background-size: 40px 40px;
-                  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+                  width: 100px;
+                  height: 100px;
+                  background: radial-gradient(circle, rgba(0, 212, 255, 0.8) 0%, rgba(157, 0, 255, 0.5) 40%, transparent 70%);
+                  filter: blur(8px);
+                  animation: moveDot 6s linear infinite;
+                  z-index: 0;
+                  border-radius: 50%;
                   pointer-events: none;
                 }
-                .admin-card {
-                  background: rgba(10, 0, 0, 0.7);
+                @keyframes moveDot {
+                  0%, 100% { top: -30px; right: -30px; }
+                  25% { top: -30px; right: calc(100% - 70px); }
+                  50% { top: calc(100% - 70px); right: calc(100% - 70px); }
+                  75% { top: calc(100% - 70px); right: -30px; }
+                }
+                .glowing-card {
+                  position: relative;
+                  background: rgba(10, 10, 12, 0.95);
                   backdrop-filter: blur(20px);
                   -webkit-backdrop-filter: blur(20px);
-                  border: 1px solid rgba(220, 38, 38, 0.2);
-                  box-shadow: 0 0 40px rgba(220, 38, 38, 0.15), inset 0 0 20px rgba(220, 38, 38, 0.05);
-                  position: relative;
-                  overflow: hidden;
+                  border-radius: 15px;
+                  z-index: 1;
+                  padding: 2.5rem;
                 }
-                .admin-card::before {
-                  content: '';
-                  position: absolute;
-                  top: 0; left: -100%; width: 50%; height: 2px;
-                  background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.8), transparent);
-                  animation: scan-line 3s linear infinite;
-                }
-                @keyframes scan-line {
-                  0% { left: -100%; }
-                  100% { left: 200%; }
-                }
-                .admin-input {
-                  background: rgba(220, 38, 38, 0.03) !important;
-                  border: 1px solid rgba(220, 38, 38, 0.1) !important;
-                  color: #ffb3b3 !important;
+                .clean-input {
+                  background: rgba(255, 255, 255, 0.03) !important;
+                  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                  color: white !important;
                   transition: all 0.3s ease !important;
                 }
-                .admin-input:focus {
-                  background: rgba(220, 38, 38, 0.08) !important;
-                  border-color: rgba(220, 38, 38, 0.5) !important;
-                  box-shadow: 0 0 15px rgba(220, 38, 38, 0.2) !important;
+                .clean-input:focus {
+                  background: rgba(255, 255, 255, 0.06) !important;
+                  border-color: rgba(0, 212, 255, 0.5) !important;
+                  box-shadow: 0 0 15px rgba(0, 212, 255, 0.15) !important;
                   outline: none !important;
                 }
-                .admin-input::placeholder {
-                  color: rgba(220, 38, 38, 0.3) !important;
+                .clean-input::placeholder {
+                  color: rgba(255, 255, 255, 0.4) !important;
                 }
-                .admin-btn {
-                  background: linear-gradient(90deg, #991b1b, #dc2626, #991b1b) !important;
-                  background-size: 200% auto !important;
-                  border: 1px solid rgba(255, 100, 100, 0.4) !important;
+                .gradient-btn {
+                  background: linear-gradient(90deg, #00d4ff, #9d00ff) !important;
+                  border: none !important;
                   color: white !important;
-                  text-shadow: 0 0 5px rgba(255,255,255,0.5) !important;
-                  transition: all 0.4s ease !important;
-                  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3) !important;
+                  font-weight: 600 !important;
+                  transition: all 0.3s ease !important;
                 }
-                .admin-btn:hover {
-                  background-position: right center !important;
-                  box-shadow: 0 0 25px rgba(220, 38, 38, 0.6) !important;
+                .gradient-btn:hover {
+                  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
                   transform: translateY(-2px) !important;
-                }
-                .warning-icon {
-                  animation: pulse-warning 2s infinite;
-                }
-                @keyframes pulse-warning {
-                  0%, 100% { filter: drop-shadow(0 0 5px rgba(220, 38, 38, 0.5)); transform: scale(1); }
-                  50% { filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.8)); transform: scale(1.05); }
-                }
-                .glitch-text {
-                  text-shadow: 0 0 15px rgba(220, 38, 38, 0.6);
-                  letter-spacing: 4px;
+                  filter: brightness(1.1);
                 }
               `}</style>
 
-              <div className="admin-grid"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,212,255,0.05)_0%,_rgba(0,0,0,0)_70%)]"></div>
               
-              <Card className="w-full max-w-md relative z-10 admin-card border-0 rounded-xl sm:p-2">
-                <CardHeader className="text-center pb-2 pt-6">
-                  <div className="mx-auto w-14 h-14 mb-4 rounded-full bg-red-950/40 flex items-center justify-center border border-red-500/30 warning-icon">
-                    <span className="text-red-500 text-2xl">⚠️</span>
+              <div className="glowing-outer z-10">
+                <div className="glowing-dot"></div>
+                <div className="glowing-card">
+                  
+                  <div className="text-center mb-8 relative z-20">
+                    <div className="mx-auto w-12 h-12 mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center border border-cyan-500/30">
+                      <span className="text-cyan-400 text-xl">🛡️</span>
+                    </div>
+                    <h2 className="text-2xl font-bold text-white tracking-wide">
+                      ADMIN GATEWAY
+                    </h2>
+                    <p className="text-slate-400 mt-2 text-sm">
+                      Secure authentication required
+                    </p>
                   </div>
-                  <CardTitle className="text-3xl font-black text-red-500 glitch-text uppercase">RESTRICTED AREA</CardTitle>
-                  <CardDescription className="text-red-400/60 mt-3 font-mono text-xs uppercase tracking-widest">
-                    {displayTitle} Gateway • Unauthorized access logged
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleAdminAuth} className="space-y-5 mt-4">
-                    <div className="space-y-2 relative group">
-                      <div className="absolute -inset-0.5 bg-red-500/20 blur opacity-0 group-hover:opacity-100 transition duration-500 rounded-lg"></div>
+                  
+                  <form onSubmit={handleAdminAuth} className="space-y-5 relative z-20">
+                    <div className="space-y-2">
                       <Input 
                         type="email" 
-                        placeholder="Node Identifier (Email)" 
+                        placeholder="Email Address" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="admin-input relative h-12 px-4 rounded-lg font-mono text-sm"
+                        className="clean-input h-12 px-4 rounded-xl"
                         required 
                       />
                     </div>
-                    <div className="space-y-2 relative group">
-                      <div className="absolute -inset-0.5 bg-red-500/20 blur opacity-0 group-hover:opacity-100 transition duration-500 rounded-lg"></div>
+                    <div className="space-y-2">
                       <Input 
                         type="password" 
-                        placeholder="Access Key (Password)" 
+                        placeholder="Access Key" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="admin-input relative h-12 px-4 rounded-lg font-mono text-sm"
+                        className="clean-input h-12 px-4 rounded-xl"
                         required 
                       />
                     </div>
-                    <div className="space-y-2 pt-6 mt-4 border-t border-red-900/30 relative group">
-                      <label className="text-[10px] font-mono text-red-500/80 uppercase tracking-[0.2em] mb-2 block">Security Clearance Key</label>
-                      <div className="absolute -inset-0.5 bg-red-500/20 blur opacity-0 group-hover:opacity-100 transition duration-500 rounded-lg top-8"></div>
+                    
+                    <div className="pt-4 border-t border-white/10 mt-2">
+                      <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2 block">
+                        Security Clearance
+                      </label>
                       <Input 
                         type="password" 
-                        placeholder="Master Override Key (hint: root123)" 
+                        placeholder="Override Key (hint: root123)" 
                         value={clearanceKey}
                         onChange={(e) => setClearanceKey(e.target.value)}
-                        className="admin-input relative h-12 px-4 rounded-lg font-mono text-center tracking-widest"
+                        className="clean-input h-12 px-4 rounded-xl text-center"
                         required 
                       />
                     </div>
         
                     {error && (
-                      <div className="p-3 mt-4 rounded-md bg-red-950/60 border border-red-500/40 text-red-400 text-xs text-center font-mono shadow-[0_0_10px_rgba(220,38,38,0.2)]">
-                        ACCESS DENIED: {error}
+                      <div className="p-3 mt-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                        {error}
                       </div>
                     )}
         
                     <Button 
                       type="submit" 
-                      className="admin-btn w-full h-12 rounded-lg font-bold tracking-[0.2em] mt-8 text-sm"
+                      className="gradient-btn w-full h-12 rounded-xl mt-6 tracking-wide"
                       disabled={loading}
                     >
                       {loading ? 'AUTHENTICATING...' : 'INITIALIZE OVERRIDE →'}
                     </Button>
                   </form>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           );
     }
