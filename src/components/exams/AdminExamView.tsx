@@ -23,7 +23,7 @@ export default function AdminExamView() {
             </div>
           </CardContent>
         </Card>
-        
+        {/* Attendance globally hidden
         <Card className="bg-destructive/10 border-destructive/30 backdrop-blur-xl">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center justify-center text-center">
@@ -32,6 +32,7 @@ export default function AdminExamView() {
             </div>
           </CardContent>
         </Card>
+        */}
 
         <Card className="bg-emerald-500/10 border-emerald-500/30 backdrop-blur-xl">
           <CardContent className="pt-6">
@@ -87,6 +88,7 @@ export default function AdminExamView() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
+              {/* Attendance globally hidden
               <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/5">
                 <div>
                   <div className="font-medium text-sm">Mandatory Attendance Threshold</div>
@@ -102,6 +104,7 @@ export default function AdminExamView() {
                   <span className="text-muted-foreground text-sm">%</span>
                 </div>
               </div>
+              */}
 
               <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/5">
                 <div>

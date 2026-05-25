@@ -73,7 +73,7 @@ export default function FacultyExamView() {
         </Card>
       </div>
 
-      {/* Eligibility Dashboard */}
+      {/* Attendance globally hidden
       <Card className="bg-destructive/5 border-destructive/20 backdrop-blur-xl">
         <CardHeader>
           <CardTitle className="text-destructive flex items-center gap-2">
@@ -114,6 +114,7 @@ export default function FacultyExamView() {
           </Table>
         </CardContent>
       </Card>
+      */}
     </div>
   );
 }

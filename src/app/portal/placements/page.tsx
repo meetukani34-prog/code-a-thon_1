@@ -126,9 +126,11 @@ export default function PlacementsPage() {
                       <p className="font-semibold">{user.user_metadata?.full_name || user.email}</p>
                       <div className="flex gap-4 items-center mt-1">
                         <p className="text-xs text-muted-foreground">{user.email}</p>
+                        {/* Attendance globally hidden
                         <p className={`text-xs font-bold ${user.mock_attendance < 75 ? 'text-destructive' : 'text-emerald-400'}`}>
                           Attendance: {user.mock_attendance}% {user.mock_attendance < 75 && ' ⚠️'}
                         </p>
+                        */}
                       </div>
                     </div>
                     
@@ -162,7 +164,7 @@ export default function PlacementsPage() {
               <div className="text-6xl mb-4">🛑</div>
               <h2 className="text-3xl font-black text-destructive mb-2">PLACEMENTS FROZEN</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
-                Your placement privileges have been temporarily suspended due to attendance threshold breaches or disciplinary action. Please contact the Placement Cell immediately.
+                Your placement privileges have been temporarily suspended due to academic probation or disciplinary action. Please contact the Placement Cell immediately.
               </p>
             </Card>
           ) : (

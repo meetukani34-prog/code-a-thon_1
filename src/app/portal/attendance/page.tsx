@@ -353,7 +353,7 @@ export default function AttendancePage() {
   }
 
   // Student View Tab State
-  const [activeTab, setActiveTab] = useState('attendance');
+  const [activeTab, setActiveTab] = useState('timetable');
 
   // Student View
   return (
@@ -364,13 +364,13 @@ export default function AttendancePage() {
           Academics Hub
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Manage your attendance, class schedules, and academic assignments.
+          Manage your class schedules and academic assignments.
         </p>
       </div>
 
       {/* Navigation Tabs */}
       <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-xl)', borderBottom: '1px solid var(--glass-border)', paddingBottom: 'var(--space-sm)' }}>
-        {['attendance', 'timetable', 'assignments'].map(tab => (
+        {['timetable', 'assignments'].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -391,66 +391,7 @@ export default function AttendancePage() {
         ))}
       </div>
 
-      {activeTab === 'attendance' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)', animation: 'fadeIn 0.3s ease-out' }}>
-          <GlassCard padding="lg" hover={false}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <h3 style={{ fontSize: 'var(--text-md)', fontWeight: 700, marginBottom: '4px' }}>Capture Live Attendance</h3>
-                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Scan for faculty Bluetooth beacon to log your presence.</p>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-                {captureStatus && <span style={{ fontSize: '12px', color: 'var(--color-success)', fontWeight: 600 }}>{captureStatus}</span>}
-                <button
-                  onClick={captureAttendance}
-                  disabled={isCapturing}
-                  style={{
-                    padding: '10px 24px',
-                    background: isCapturing ? 'transparent' : 'var(--accent-primary)',
-                    border: isCapturing ? '1px solid var(--accent-primary)' : 'none',
-                    color: '#000',
-                    borderRadius: 'var(--radius-md)',
-                    fontWeight: 700,
-                    cursor: isCapturing ? 'not-allowed' : 'pointer',
-                  }}
-                >
-                  {isCapturing ? 'Scanning...' : 'Capture Attendance'}
-                </button>
-              </div>
-            </div>
-          </GlassCard>
-
-          <GlassCard padding="lg" hover={false}>
-            <h3 style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-xl)' }}>
-              Semester Overview
-            </h3>
-            
-            <div style={{ display: 'flex', gap: 'var(--space-3xl)', justifyContent: 'center', marginBottom: 'var(--space-2xl)' }}>
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-success)', lineHeight: 1 }}>{attended}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Attended</p>
-              </div>
-              
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-danger)', lineHeight: 1 }}>{missed}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Classes Missed</p>
-              </div>
-            </div>
-            
-            <div style={{
-              background: 'rgba(0,0,0,0.2)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--glass-border)',
-              padding: 'var(--space-md)',
-              textAlign: 'center'
-            }}>
-              <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>
-                Overall Attendance Rate: <strong style={{ color: 'var(--color-success)', fontSize: '18px' }}>{attendanceRate}%</strong>
-              </p>
-            </div>
-          </GlassCard>
-        </div>
-      )}
+      {/* activeTab === 'attendance' has been hidden globally per request */}
 
       {activeTab === 'timetable' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', animation: 'fadeIn 0.3s ease-out' }}>

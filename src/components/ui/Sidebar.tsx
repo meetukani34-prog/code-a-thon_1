@@ -15,7 +15,7 @@ const navItems = [
   { id: 'hostel', label: 'Hostel Module', icon: '🏨', path: '/portal/hostel' },
   { id: 'transport', label: 'Transport Live', icon: '🚌', path: '/portal/transport' },
   { id: 'events', label: 'Events Portal', icon: '★', path: '/portal/events' },
-  { id: 'attendance', label: 'Attendance', icon: '◎', path: '/portal/attendance' },
+  { id: 'attendance', label: 'Academics', icon: '◎', path: '/portal/attendance' },
   { id: 'placements', label: 'Placements', icon: '◈', path: '/portal/placements' },
   { id: 'analytics', label: 'Analytics', icon: '◫', path: '/portal/analytics' },
 ];

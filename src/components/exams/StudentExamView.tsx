@@ -6,8 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 export default function StudentExamView() {
   // Mock data for prototype
-  const attendance = 72; // Below 75% triggers warning
-  const isEligible = attendance >= 75;
+  // const attendance = 72; // Below 75% triggers warning
+  const isEligible = true; // globally disabled attendance check
 
   const timetable = [
     { date: '2026-06-10', time: '10:00 AM', subject: 'Data Structures', code: 'CS301' },
@@ -29,10 +29,12 @@ export default function StudentExamView() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
+              {/* Attendance globally hidden
               <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/5">
                 <span className="text-muted-foreground">Overall Attendance:</span>
                 <span className={`font-bold ${isEligible ? 'text-emerald-400' : 'text-destructive'}`}>{attendance}%</span>
               </div>
+              */}
               
               {!isEligible ? (
                 <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
