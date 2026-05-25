@@ -151,7 +151,7 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
         className="absolute inset-0 z-0 h-full w-full opacity-40"
         style={{ pointerEvents: "none" }}
       />
-      <div className="relative z-10 flex min-h-screen items-center justify-center">
+      <div className="relative z-10 w-full min-h-screen">
         {children}
       </div>
     </div>

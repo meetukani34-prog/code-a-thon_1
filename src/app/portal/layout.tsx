@@ -2,7 +2,7 @@ import Sidebar from '@/components/ui/Sidebar';
 import TopBar from '@/components/ui/TopBar';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { ParticleHero } from '@/components/ui/particle-hero';
+import GridGlowBackground from '@/components/ui/grid-glow-background';
 
 export default async function DashboardLayout({
   children,
@@ -19,7 +19,7 @@ export default async function DashboardLayout({
   const role = session.user.user_metadata?.role || 'student';
 
   return (
-    <ParticleHero>
+    <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
       <div style={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
         <Sidebar role={role} />
         <div style={{
@@ -37,6 +37,6 @@ export default async function DashboardLayout({
           </main>
         </div>
       </div>
-    </ParticleHero>
+    </GridGlowBackground>
   );
 }
