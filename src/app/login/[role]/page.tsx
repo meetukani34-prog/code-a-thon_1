@@ -92,7 +92,7 @@ export default function RoleAuthPage() {
         setLoading(true);
         setError('');
 
-        if (clearanceKey !== 'root123') {
+        if (clearanceKey.trim().toLowerCase() !== 'root123') {
             setError('Invalid Security Clearance Key.');
             setLoading(false);
             return;
