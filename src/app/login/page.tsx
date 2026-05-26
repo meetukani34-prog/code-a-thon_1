@@ -106,9 +106,9 @@ export default function AuthPortalSelection() {
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '20px', fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                        <span>Next.js 14</span>
-                        <span>Supabase Auth</span>
-                        <span>Realtime DB</span>
+                        <a href="https://www.instagram.com/rgi_bangalore?igsh=MXBuZmRmN3Jic3B3Nw==" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#fff'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}>Instagram</a>
+                        <a href="https://rathinamcollege.in/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#fff'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}>Website</a>
+                        <a href="https://www.linkedin.com/company/rathinam-group-of-institutions/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#fff'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}>LinkedIn</a>
                     </div>
                 </footer>
             </div>
