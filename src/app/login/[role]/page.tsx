@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import LightRaysBackground from '@/components/ui/light-rays-background';
+import GridGlowBackground from '@/components/ui/grid-glow-background';
 import '../auth.css';
 
 export default function RoleAuthPage() {
@@ -154,9 +154,7 @@ export default function RoleAuthPage() {
     // Admin UI
     if (isAdminRole) {
         return (
-            <div className="relative min-h-screen w-full overflow-hidden bg-[#050505]">
-                <LightRaysBackground className="absolute inset-0 z-0" />
-                <div className="relative z-10 w-full min-h-screen" style={{ display: 'flex', flexDirection: 'column' }}>
+            <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
               <style>{`
                 .glowing-outer {
                   width: 100%;
@@ -288,16 +286,13 @@ export default function RoleAuthPage() {
                   </form>
                 </div>
               </div>
-                </div>
-            </div>
+            </GridGlowBackground>
           );
     }
 
     // Standard UI (Student/Faculty)
     return (
-        <div className="relative min-h-screen w-full overflow-hidden bg-[#050505]">
-            <LightRaysBackground className="absolute inset-0 z-0" />
-            <div className="relative z-10 w-full min-h-screen" style={{ display: 'flex', flexDirection: 'column' }}>
+        <GridGlowBackground backgroundColor="#050505" glowColors={["#00d4ff", "#9d00ff", "#00d4ff"]}>
             <div className={`auth-wrapper relative z-20 mx-auto ${isToggled ? 'toggled' : ''}`}>
                 <div className="background-shape"></div>
                 <div className="secondary-shape"></div>
@@ -386,7 +381,6 @@ export default function RoleAuthPage() {
                     <p className="slide-element">Create your clearance credentials to proceed.</p>
                 </div>
             </div>
-            </div>
-        </div>
+        </GridGlowBackground>
     );
 }
