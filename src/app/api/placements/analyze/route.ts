@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-const pdfParse = require('pdf-parse');
-
 export async function POST(req: NextRequest) {
   try {
+    const pdfParse = require('pdf-parse');
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
     const jobDescription = formData.get('jobDescription') as string | null;
