@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { createServiceRoleClient } from '@/lib/supabase/server';
+import { createServiceRoleClient, createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,14 +20,32 @@ export async function POST(req: NextRequest) {
 
     if (contextType === 'admin') {
       try {
+        const supabase = await createServerSupabaseClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        const userRole = session?.user.user_metadata?.role || 'student';
+        const userCollege = session?.user.user_metadata?.college_name;
+
         const adminClient = await createServiceRoleClient();
         const { data } = await adminClient.auth.admin.listUsers();
+        
         if (data && data.users) {
-          const totalIdentities = data.users.length;
-          const students = data.users.filter((u: any) => (u.user_metadata?.role || 'student') === 'student').length;
-          const faculty = data.users.filter((u: any) => u.user_metadata?.role === 'faculty').length;
-          const pending = data.users.filter((u: any) => u.user_metadata?.role === 'pending').length;
-          dynamicContext = `\n[LIVE SYSTEM DATA]\nTotal Identities: ${totalIdentities}\nStudents Enrolled: ${students}\nFaculty Enrolled: ${faculty}\nPending Users: ${pending}\nAlways use this LIVE SYSTEM DATA to answer questions about user counts.`;
+          let usersToCount = data.users;
+          
+          if (userRole === 'admin') {
+            usersToCount = usersToCount.filter(u => {
+              const uRole = u.user_metadata?.role || 'student'; // Unassigned are treated as student
+              const uCollege = u.user_metadata?.college_name;
+              const isTargetRole = uRole === 'student' || uRole === 'faculty' || uRole === 'pending' || !u.user_metadata?.role;
+              return isTargetRole && uCollege === userCollege;
+            });
+          }
+
+          const totalIdentities = usersToCount.length;
+          const students = usersToCount.filter((u: any) => (u.user_metadata?.role?.toLowerCase() === 'student' || !u.user_metadata?.role)).length;
+          const faculty = usersToCount.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'faculty').length;
+          const pending = usersToCount.filter((u: any) => u.user_metadata?.role?.toLowerCase() === 'pending').length;
+          
+          dynamicContext = `\n[LIVE SYSTEM DATA]\nTotal Identities: ${totalIdentities}\nStudents Enrolled: ${students}\nFaculty Enrolled: ${faculty}\nPending Users: ${pending}\nAlways use this LIVE SYSTEM DATA to answer questions about user counts. Do not invent numbers.`;
         }
       } catch (e) {
         console.error("Failed to fetch live data", e);
