@@ -45,6 +45,49 @@ Campus OS is a next-generation, AI-powered multi-tenant college management syste
 
 ---
 
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff
+    classDef backend fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#fff
+    classDef ai fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+    classDef db fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff
+
+    %% Components
+    subgraph Client [Frontend UI - Next.js]
+        A1[Student Portal]:::client
+        A2[Admin/Faculty Command Center]:::client
+        A3[Floating AI Assistant Widget]:::client
+    end
+
+    subgraph Backend [Serverless API Handlers]
+        B1[Auth & RBAC Middleware]:::backend
+        B2[NVIDIA API Route]:::backend
+        B3[Admin Data Fetcher]:::backend
+    end
+
+    subgraph Services [External Services]
+        C1[(Supabase PostgreSQL)]:::db
+        C2[NVIDIA NIM - Llama 3.1 API]:::ai
+    end
+
+    %% Connections
+    A1 <-->|Submit Forms, Fetch Data| B1
+    A2 <-->|Manage Users, Monitor| B1
+    A3 <-->|Chat Context & Queries| B2
+    A1 -->|Upload Resume PDF| B2
+
+    B1 <-->|RLS & Service Role Queries| C1
+    B3 <-->|Live Data Aggregation| C1
+    
+    B2 <-->|API Calls & Prompting| C2
+    B3 -.->|Injects Live Stats Context| B2
+```
+
+---
+
 ## ⚙️ Setup & Installation
 
 ### 1. Clone the repository
