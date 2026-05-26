@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,9 +16,24 @@ export async function POST(req: NextRequest) {
     });
 
     let systemPrompt = "You are a helpful AI assistant.";
+    let dynamicContext = "";
 
     if (contextType === 'admin') {
-      systemPrompt = "You are the Campus OS Admin Assistant. You only answer questions related to campus management, student records, hostel alerts, placements overview, and college administration. Be concise and professional. Do not answer general knowledge questions outside of the portal's scope.";
+      try {
+        const adminClient = await createServiceRoleClient();
+        const { data } = await adminClient.auth.admin.listUsers();
+        if (data && data.users) {
+          const totalIdentities = data.users.length;
+          const students = data.users.filter((u: any) => (u.user_metadata?.role || 'student') === 'student').length;
+          const faculty = data.users.filter((u: any) => u.user_metadata?.role === 'faculty').length;
+          const pending = data.users.filter((u: any) => u.user_metadata?.role === 'pending').length;
+          dynamicContext = `\n[LIVE SYSTEM DATA]\nTotal Identities: ${totalIdentities}\nStudents Enrolled: ${students}\nFaculty Enrolled: ${faculty}\nPending Users: ${pending}\nAlways use this LIVE SYSTEM DATA to answer questions about user counts.`;
+        }
+      } catch (e) {
+        console.error("Failed to fetch live data", e);
+      }
+      
+      systemPrompt = "You are the Campus OS Admin Assistant. You only answer questions related to campus management, student records, hostel alerts, placements overview, and college administration. Be concise and professional. Do not answer general knowledge questions outside of the portal's scope." + dynamicContext;
     } else if (contextType === 'placement') {
       systemPrompt = "You are a Career Counselor AI for Campus OS. If the user is a student, help them improve their resume and prepare for interviews based on the provided context. If the user is an admin, provide insights about the student's resume and job fit. Keep answers professional and focused on career development.";
     }
