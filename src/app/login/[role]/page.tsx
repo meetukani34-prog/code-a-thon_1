@@ -57,7 +57,7 @@ export default function RoleAuthPage() {
                     setLoading(false);
                     return;
                 }
-                router.push(`/${userRole}`);
+                router.push(`/portal`);
             }
         } else {
             const { error, data } = await supabase.auth.signUp({ 
@@ -77,7 +77,7 @@ export default function RoleAuthPage() {
             } else {
                 if (data.session) {
                     const userRole = data.user?.user_metadata?.role?.toLowerCase() || 'student';
-                    router.push(`/${userRole}`);
+                    router.push(`/portal`);
                 } else {
                     setMessage('Registration successful! Check your email to confirm if required.');
                     setIsToggled(false);
