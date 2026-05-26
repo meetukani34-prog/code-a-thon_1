@@ -111,11 +111,22 @@ export default function PlacementsPage() {
         method: 'POST',
         body: formData,
       });
+      
+      if (!res.ok) {
+        throw new Error('Server returned an error. Please check NVIDIA API Key in Vercel.');
+      }
+
       const data = await res.json();
-      if (data.score !== undefined) setMatchScore(data.score);
+      if (data.score !== undefined) {
+        setMatchScore(data.score);
+      } else {
+        throw new Error('Invalid response format');
+      }
+      
       if (data.keywords) setKeywords(data.keywords);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert("AI Match Failed: " + (e.message || "Unknown error"));
       setMatchScore(65);
       setKeywords(['Error processing']);
     } finally {
@@ -291,7 +302,11 @@ export default function PlacementsPage() {
                       <p className="text-[11px] text-muted-foreground">Eligibility Criteria:</p>
                       <p className="text-[13px] font-semibold mt-1">&gt; 8.0 CGPA, No Active Backlogs</p>
                     </div>
-                    <Button className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50" disabled={!resumeUploaded || (matchScore !== null && matchScore < 60)}>
+                    <Button 
+                      className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/50" 
+                      disabled={!resumeUploaded || (matchScore !== null && matchScore < 60)}
+                      onClick={() => alert("Application Submitted Successfully to Google!")}
+                    >
                       {resumeUploaded ? 'Apply with Profile' : 'Upload Resume First'}
                     </Button>
                   </CardContent>
@@ -299,7 +314,7 @@ export default function PlacementsPage() {
 
                 <Card className="bg-background/50 backdrop-blur-xl border-glass-border opacity-90">
                   <CardContent className="p-5">
-                    <div className="flex justify-between items-start mb-4">
+                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h3 className="text-lg font-bold">Microsoft</h3>
                         <p className="text-muted-foreground text-xs">Cloud Solution Architect</p>
@@ -311,7 +326,11 @@ export default function PlacementsPage() {
                       <p className="text-[13px] font-semibold mt-1 text-blue-400">Round 1 Cleared • Technical Interview Scheduled</p>
                       <p className="text-xs mt-2">Slot: Tomorrow, 10:00 AM (Virtual)</p>
                     </div>
-                    <Button variant="outline" className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10">
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                      onClick={() => alert("Interview Link: https://teams.microsoft.com/l/meetup-join/...")}
+                    >
                       View Interview Details
                     </Button>
                   </CardContent>
