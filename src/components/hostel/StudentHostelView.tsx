@@ -17,8 +17,7 @@ export default function StudentHostelView() {
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
 
-  // We'll use a mocked student name for demonstration if the user doesn't have one in DB yet.
-  const studentName = 'Priya Patel';
+  const [studentName, setStudentName] = useState('Student');
 
   useEffect(() => {
     fetchData();
@@ -27,11 +26,16 @@ export default function StudentHostelView() {
   const fetchData = async () => {
     const supabase = createClient();
     
+    // Get real user name
+    const { data: { session } } = await supabase.auth.getSession();
+    const realName = session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || 'Student';
+    setStudentName(realName);
+
     // Fetch resident info
     const { data: residents } = await supabase
       .from('hostel_residents')
       .select('*, hostel_rooms(*)')
-      .eq('student_name', studentName)
+      .eq('student_name', realName)
       .single();
       
     if (residents) {
@@ -45,7 +49,7 @@ export default function StudentHostelView() {
     const { data: myLeaves } = await supabase
       .from('hostel_leaves')
       .select('*')
-      .eq('student_name', studentName)
+      .eq('student_name', realName)
       .order('created_at', { ascending: false });
       
     if (myLeaves) setLeaves(myLeaves);
