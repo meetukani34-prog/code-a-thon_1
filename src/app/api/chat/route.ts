@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
     const reply = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request.";
 
     return NextResponse.json({ reply });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in chat API:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
   }
 }

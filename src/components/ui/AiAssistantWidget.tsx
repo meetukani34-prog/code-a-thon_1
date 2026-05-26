@@ -57,7 +57,7 @@ export function AiAssistantWidget({ contextType, extraContext }: AiAssistantWidg
       if (data.reply) {
         setMessages([...newMessages, { role: 'assistant', content: data.reply }]);
       } else {
-        setMessages([...newMessages, { role: 'assistant', content: 'Oops! Something went wrong on my end.' }]);
+        setMessages([...newMessages, { role: 'assistant', content: data.details ? `Error: ${data.details}` : 'Oops! Something went wrong on my end.' }]);
       }
     } catch (error) {
       setMessages([...newMessages, { role: 'assistant', content: 'Failed to reach the server. Please try again.' }]);
