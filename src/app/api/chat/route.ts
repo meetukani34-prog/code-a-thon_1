@@ -51,9 +51,9 @@ export async function POST(req: NextRequest) {
         console.error("Failed to fetch live data", e);
       }
       
-      systemPrompt = "You are the Campus OS Admin Assistant. You only answer questions related to campus management, student records, hostel alerts, placements overview, and college administration. Be concise and professional. Do not answer general knowledge questions outside of the portal's scope." + dynamicContext;
+      systemPrompt = "You are the SARVAM Admin Assistant. You only answer questions related to campus management, student records, hostel alerts, placements overview, and college administration. Be concise and professional. Do not answer general knowledge questions outside of the portal's scope." + dynamicContext;
     } else if (contextType === 'placement') {
-      systemPrompt = "You are a Career Counselor AI for Campus OS. If the user is a student, help them improve their resume and prepare for interviews based on the provided context. If the user is an admin, provide insights about the student's resume and job fit. Keep answers professional and focused on career development.";
+      systemPrompt = "You are a Career Counselor AI for SARVAM. If the user is a student, help them improve their resume and prepare for interviews based on the provided context. If the user is an admin, provide insights about the student's resume and job fit. Keep answers professional and focused on career development.";
     }
 
     if (extraContext) {

@@ -1,5 +1,5 @@
 -- ========================================
--- CAMPUS OS — Database Functions & Triggers
+-- SARVAM — Database Functions & Triggers
 -- ========================================
 
 -- =====================

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Campus OS — Ecosystem Singularity",
+  title: "SARVAM — Ecosystem Singularity",
   description: "A decentralized, AI-powered campus management platform with zero operational friction. Real-time event streams, multi-tenant architecture, and cognitive automation.",
   keywords: "campus management, AI, real-time, event-driven, multi-tenant",
 };

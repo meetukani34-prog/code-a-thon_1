@@ -9,7 +9,7 @@ export default function AboutUs() {
             &larr; Back to Login
           </Link>
         </div>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '20px' }}>About Campus OS</h1>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '20px' }}>About SARVAM</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: 1.6, fontSize: '1.1rem' }}>Engineered for Excellence.</p>
         
         <div style={{ color: 'var(--text-muted)', lineHeight: 1.8 }}>
@@ -17,10 +17,10 @@ export default function AboutUs() {
           <p style={{ marginBottom: '15px' }}>Our mission is to bridge the gap between traditional educational administration and next-generation technology. We believe that campus operations should be invisible, frictionless, and secure, allowing students and faculty to focus entirely on learning and research.</p>
           
           <h2 style={{ color: '#fff', fontSize: '1.5rem', marginTop: '30px', marginBottom: '15px' }}>Core Technologies</h2>
-          <p style={{ marginBottom: '15px' }}>Campus OS leverages modern web architecture including Next.js 14, Supabase Auth for Role-Based Access Control, and real-time database subscriptions to keep all campus nodes perfectly synchronized. From BLE Beacon attendance to AI-driven Placement matching, we bring cutting-edge solutions to everyday campus challenges.</p>
+          <p style={{ marginBottom: '15px' }}>SARVAM leverages modern web architecture including Next.js 14, Supabase Auth for Role-Based Access Control, and real-time database subscriptions to keep all campus nodes perfectly synchronized. From BLE Beacon attendance to AI-driven Placement matching, we bring cutting-edge solutions to everyday campus challenges.</p>
           
           <h2 style={{ color: '#fff', fontSize: '1.5rem', marginTop: '30px', marginBottom: '15px' }}>The Team</h2>
-          <p style={{ marginBottom: '15px' }}>Built by a passionate team of developers for the 2026 Code-A-Thon, Campus OS represents the future of institutional management systems.</p>
+          <p style={{ marginBottom: '15px' }}>Built by a passionate team of developers for the 2026 Code-A-Thon, SARVAM represents the future of institutional management systems.</p>
         </div>
       </div>
     </div>

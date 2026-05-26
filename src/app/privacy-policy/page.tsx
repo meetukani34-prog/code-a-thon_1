@@ -14,13 +14,13 @@ export default function PrivacyPolicy() {
         
         <div style={{ color: 'var(--text-muted)', lineHeight: 1.8 }}>
           <h2 style={{ color: '#fff', fontSize: '1.5rem', marginTop: '30px', marginBottom: '15px' }}>1. Data Collection</h2>
-          <p style={{ marginBottom: '15px' }}>At Campus OS, we collect and process biometric data, location data, and academic records solely for the purpose of maintaining a secure and efficient campus environment. Your Face ID embeddings are cryptographically hashed and never stored as raw images.</p>
+          <p style={{ marginBottom: '15px' }}>At SARVAM, we collect and process biometric data, location data, and academic records solely for the purpose of maintaining a secure and efficient campus environment. Your Face ID embeddings are cryptographically hashed and never stored as raw images.</p>
           
           <h2 style={{ color: '#fff', fontSize: '1.5rem', marginTop: '30px', marginBottom: '15px' }}>2. Data Usage</h2>
           <p style={{ marginBottom: '15px' }}>Your data is used to automatically record attendance, verify identity at security checkpoints, and match your profile with prospective employers via our AI Placement Engine. We do not sell your personal data to third parties.</p>
           
           <h2 style={{ color: '#fff', fontSize: '1.5rem', marginTop: '30px', marginBottom: '15px' }}>3. Security</h2>
-          <p style={{ marginBottom: '15px' }}>Campus OS utilizes military-grade encryption (AES-256) and Role-Based Access Control (RBAC) to ensure that only authorized personnel can view specific subsets of your data.</p>
+          <p style={{ marginBottom: '15px' }}>SARVAM utilizes military-grade encryption (AES-256) and Role-Based Access Control (RBAC) to ensure that only authorized personnel can view specific subsets of your data.</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 -- ========================================
--- CAMPUS OS — Core Database Schema
+-- SARVAM — Core Database Schema
 -- Multi-Tenant PostgreSQL with RLS
 -- ========================================
 

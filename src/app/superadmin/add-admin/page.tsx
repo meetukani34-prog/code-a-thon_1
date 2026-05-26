@@ -55,7 +55,7 @@ export default function AddAdminPage() {
           System Administrators
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Provision new high-level administrator nodes into the Campus OS hierarchy.
+          Provision new high-level administrator nodes into the SARVAM hierarchy.
         </p>
       </div>
 

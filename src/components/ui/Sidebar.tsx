@@ -68,7 +68,7 @@ export default function Sidebar({ role = 'student' }: { role?: string }) {
             letterSpacing: '1px',
             lineHeight: 1.2,
           }}>
-            CAMPUS OS
+            SARVAM
           </h1>
           <p style={{
             fontSize: '10px',

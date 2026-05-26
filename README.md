@@ -1,6 +1,6 @@
-# 🎓 Campus OS - Singularity V1.0
+# 🎓 SARVAM - Singularity V1.0
 
-Campus OS is a next-generation, AI-powered multi-tenant college management system built for the modern educational ecosystem. It features a stunning Cyberpunk/Glassmorphism UI and integrates advanced AI capabilities for administrative tasks and student career counseling.
+SARVAM is a next-generation, AI-powered multi-tenant college management system built for the modern educational ecosystem. It features a stunning Cyberpunk/Glassmorphism UI and integrates advanced AI capabilities for administrative tasks and student career counseling.
 
 ## 🚀 Key Features & Modules
 

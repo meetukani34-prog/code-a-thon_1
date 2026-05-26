@@ -1,5 +1,5 @@
 -- ============================================
--- CAMPUS OS - Complete Database Schema
+-- SARVAM - Complete Database Schema
 -- Run this in Supabase SQL Editor
 -- ============================================
 

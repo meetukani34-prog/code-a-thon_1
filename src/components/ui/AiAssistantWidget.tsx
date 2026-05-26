@@ -18,7 +18,7 @@ interface AiAssistantWidgetProps {
 export function AiAssistantWidget({ contextType, extraContext }: AiAssistantWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: `Hello! I'm your Campus OS ${contextType === 'admin' ? 'Admin' : 'Career'} Assistant. How can I help you today?` }
+    { role: 'assistant', content: `Hello! I'm your SARVAM ${contextType === 'admin' ? 'Admin' : 'Career'} Assistant. How can I help you today?` }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
