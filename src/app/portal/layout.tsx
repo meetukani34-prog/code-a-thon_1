@@ -2,7 +2,7 @@ import Sidebar from '@/components/ui/Sidebar';
 import TopBar from '@/components/ui/TopBar';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { ParticleHero } from '@/components/ui/particle-hero';
+import LightRaysBackground from '@/components/ui/light-rays-background';
 
 export default async function DashboardLayout({
   children,
@@ -19,8 +19,9 @@ export default async function DashboardLayout({
   const role = session.user.user_metadata?.role || 'student';
 
   return (
-    <ParticleHero>
-      <div style={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#050505]">
+      <LightRaysBackground className="absolute inset-0 z-0 fixed" />
+      <div className="relative z-10 w-full min-h-screen" style={{ display: 'flex' }}>
         <Sidebar role={role} />
         <div style={{
           flex: 1,
@@ -37,6 +38,6 @@ export default async function DashboardLayout({
           </main>
         </div>
       </div>
-    </ParticleHero>
+    </div>
   );
 }
