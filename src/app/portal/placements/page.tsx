@@ -5,6 +5,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { AiAssistantWidget } from '@/components/ui/AiAssistantWidget';
 
 export default function PlacementsPage() {
   const [role, setRole] = useState('student');
@@ -320,6 +321,7 @@ export default function PlacementsPage() {
           )}
         </div>
       )}
+      <AiAssistantWidget contextType="placement" />
     </div>
   );
 }

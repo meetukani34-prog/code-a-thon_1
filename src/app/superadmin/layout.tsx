@@ -2,6 +2,7 @@ import Sidebar from '@/components/ui/Sidebar';
 import TopBar from '@/components/ui/TopBar';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { AiAssistantWidget } from '@/components/ui/AiAssistantWidget';
 
 export default async function DashboardLayout({
   children,
@@ -38,6 +39,7 @@ export default async function DashboardLayout({
         }}>
           {children}
         </main>
+        <AiAssistantWidget contextType="admin" />
       </div>
     </div>
   );
